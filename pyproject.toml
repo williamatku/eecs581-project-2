@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=72.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "eecs581-project-2-battleship_MORRISWA"
+version = "1.0.1.dev0"
+authors = [
+    { name = "Bui, Nathan Toan Di", email = "nathanb948@ku.edu" },
+    { name = "Chen, Michelle", email = "mic.chen3@ku.edu" },
+    { name = "Owolabi, Justin", email = "justin.owolabi@ku.edu" },
+    { name = "Priddy, Jaret Tyler", email = "jaret_priddy@ku.edu" },
+    { name = "Thapa, Anil", email = "anilthapa@ku.edu" },
+    { name = "William Morris", email= "william@morriswa.org" },
+]
+description = "Pygame Battleship"
+requires-python = ">=3.12"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "pygame==2.6.0",
+]
+
+[project.urls]
+Original_Project = "https://github.com/lakerpack/eecs581Proj1"
+Project_Fork = "https://github.com/williamatku/eecs581-project-2"

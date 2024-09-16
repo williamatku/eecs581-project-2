@@ -1,1 +1,13 @@
-virtualenv/
+### venv ###
+bin
+include
+lib
+pyvenv.cfg
+
+### pycache ###
+**/__pycache__
+**/*.egg-info
+
+### ide ###
+.idea
+.vscode
