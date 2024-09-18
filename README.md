@@ -29,16 +29,25 @@ A Python implementation of the classic battleship game using the pygame library.
 ## Installation
 - Install python 3.12 https://www.python.org/downloads/
 - Open project root directory in terminal
-- Install project environment
+- Initalize project environment
 
       python3.12 -m venv .
-      source bin/activate
-    - NOTE: to deactivate project environment
+- Activate Project Requirement
+    - Mac/Linux
+
+            source bin/activate
+
+            - NOTE: to deactivate project environment
 
           deactivate
-    - NOTE: to reset project environment (macos, linux, powershell?)
+    - NOTE: to reset project environment (macos, linux,)
 
           rm -rf bin include lib pyvenv.cfg
+    - Windows Powershell
+
+            .\Scripts\activate
+
+    
 - Install project in development mode and dependencies with PIP 
 
       pip install -e .
