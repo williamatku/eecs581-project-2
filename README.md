@@ -1,4 +1,4 @@
-# Battleship Game (EECS 581 Project 1)
+# Battleship Game EECS 581
 
 A Python implementation of the classic battleship game using the pygame library. The game supports 1-2 players, allowing you to place ships on a grid and take turns guessing the positions of the opponent's ships.
 
@@ -27,24 +27,24 @@ A Python implementation of the classic battleship game using the pygame library.
 3. **Take Turns:** Players take turns guessing the positions of the opponent's ships by clicking on the grid.
 
 ## Installation
+- Install python 3.12 https://www.python.org/downloads/
+- Open project root directory in terminal
+- Install project environment
 
-1. Clone the repository:
+      python3.12 -m venv .
+      source bin/activate
+    - NOTE: to deactivate project environment
 
-   ```python
-   git clone https://github.com/lakerpack/eecs581Proj1.git
-   ```
+          deactivate
+    - NOTE: to reset project environment (macos, linux, powershell?)
 
-2. Install the required dependencies:
+          rm -rf bin include lib pyvenv.cfg
+- Install project in development mode and dependencies with PIP 
 
-   ```python
-   pip install -r requirements.txt
-   ```
-
-3. Run the game:
-
-   ```python
-   python game.py
-   ```
+      pip install -e .
+- Run on local machine
+      
+      python ./src/main.py
 
 ## Controls
 
