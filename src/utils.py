@@ -229,20 +229,21 @@ def handlePlayerTurn(screen, currentPlayer,
                         if currentPlayer.guesses[gridY][gridX] == 0:  # (N) if the square hasn't been shot before
                             if currentPlayer.check_hit(enemy, gridX,
                                                        gridY):  # (N) check if it was a hit or miss using the check_hit function
-                                hit_text = font.render(f"HIT! Please turn the screen to the next player", True, (255, 0,
+                                hit_text = font.render('HIT! Please turn the screen to the next player', True, (255, 0,
                                                                       0))  # (N) essentially this is just a text fill on the screen that will indicate that it is a hit if the check_hit function returns True
                                 screen.fill("skyblue")  # (N) fill screen with color bue
                                 screen.blit(hit_text, (settings.GAMEWIDTH // 2 - hit_text.get_width() // 2,
                                                        settings.GAMEHEIGHT // 2))  # (N) display the hit text on the screen
                                 pygame.display.flip()  # (N) update display
-                                pygame.time.wait(10000)  # (N) wait a bit so the hit shows for a little bit
+                                pygame.time.wait(settings.TURN_TIME_OUT_SECONDS * 1000)  # (N) wait a bit so the hit shows for a little bit
+                                
                             else:
-                                miss_text = font.render(f"MISS! Please turn the screen to the next player", True, (0, 0,
+                                miss_text = font.render('MISS! Please turn the screen to the next player', True, (0, 0,
                                                                         255))  # (N) or if it was the miss do the exact same thing as for a hit but instead of "Hit" being displayed, put "Miss" instead
                                 screen.fill("skyblue")
                                 screen.blit(miss_text, (settings.GAMEWIDTH // 2 - miss_text.get_width() // 2, settings.GAMEHEIGHT // 2))
                                 pygame.display.flip()
-                                pygame.time.wait(10000)
+                                pygame.time.wait(settings.TURN_TIME_OUT_SECONDS * 1000)
                             drawBoard(screen, currentPlayer,
                                       enemy)  # (N) redraw the board to show a hit or miss on the screen
                             if check_for_win(
