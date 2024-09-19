@@ -1,5 +1,6 @@
 import settings
 import pygame
+import sys
 
 def getCount(screen):  # (M) initial screen that determines how many ships the players will deal with
     font = pygame.font.Font(None,
@@ -265,3 +266,59 @@ def check_for_win(
     return all(player.sunk_ships.get(ship_size, False) for ship_size in
                player.ships)  # (N) this will check to see if all of the player's ships (which in the program is called as the enemy for the function call) are sunk.
     # (N) This is done by checking if every ship in the enemy's ships placed are present in their dicts of ships that are sunk. If that is the case then return true, otherwise return false because the game is not won yet
+
+
+def showModeSelection(screen):
+    # Fonts for the buttons
+    font = pygame.font.Font(None, 36)
+
+    # Text for the buttons
+    ai_text = font.render("PVC", True, (255, 255, 255))  # White text for better contrast
+    player_text = font.render("PVP", True, (255, 255, 255))
+
+    # Button dimensions and positions
+    button_width = 300
+    button_height = 60
+    ai_button_rect = pygame.Rect((settings.GAMEWIDTH // 2 - button_width // 2, 200), (button_width, button_height))
+    player_button_rect = pygame.Rect((settings.GAMEWIDTH // 2 - button_width // 2, 300), (button_width, button_height))
+
+    running = True
+    while running:
+        screen.fill("skyblue")  # Clear screen with sky blue background
+
+        # Add shadow effect for the buttons
+        shadow_offset = 5
+        pygame.draw.rect(screen, (0, 100, 0), ai_button_rect.move(shadow_offset, shadow_offset), border_radius=10)
+        pygame.draw.rect(screen, (0, 100, 0), player_button_rect.move(shadow_offset, shadow_offset), border_radius=10)
+
+        # Draw the buttons with rounded corners
+        pygame.draw.rect(screen, (0, 200, 0), ai_button_rect, border_radius=10)  # Rounded corners with border_radius
+        pygame.draw.rect(screen, (0, 200, 0), player_button_rect, border_radius=10)
+
+        # Draw the text on the buttons
+        screen.blit(ai_text, (
+        ai_button_rect.centerx - ai_text.get_width() // 2, ai_button_rect.centery - ai_text.get_height() // 2))
+        screen.blit(player_text, (player_button_rect.centerx - player_text.get_width() // 2,
+                                  player_button_rect.centery - player_text.get_height() // 2))
+
+        pygame.display.flip()  # Update screen
+
+        # Event handling
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                mouse_pos = event.pos
+
+                # Check if clicked on AI button
+                if ai_button_rect.collidepoint(mouse_pos):
+                    print("AI mode selected")  # Placeholder until AI functionality is complete
+                    running = False
+                    return "AI"
+
+                # Check if clicked on Play Against Player button
+                if player_button_rect.collidepoint(mouse_pos):
+                    print("Player mode selected")
+                    running = False
+                    return "Player"
