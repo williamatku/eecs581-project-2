@@ -129,9 +129,9 @@ def startBoard(screen, count,
                 elif player.board[y][x] != 0:  # (A) if the block isn't even empty, e.g. it has a ship
                     ship_size = player.board[y][
                         x]  # (A) find the type of ship/ship size by checking the player's board
-                    ship_color = settings.SHIPCOLORS.get(ship_size,
-                                                (0, 255, 0))  # (A) get the color corresponding to the type of ship
-                    pygame.draw.rect(screen, ship_color, pyRect)  # (A) draw the block with the ship's color
+                    ship_image = settings.SHIPCOLORS.get(ship_size)  # (A) get the color corresponding to the type of ship
+                    pygame.Surface.blit(screen, ship_image, pyRect)
+                    # pygame.draw.rect(screen, ship_color, pyRect)  # (A) draw the block with the ship's color
 
                 pygame.draw.rect(screen, lineColor, pyRect,
                                  1)  # (A) this draws the grid, the extra parameter at the end determines if it's 'hollow' and has a border strength
@@ -188,9 +188,9 @@ def drawBoard(screen, player, enemy):  # (M) function that draws the board in th
             if player.board[y][
                 x] != 0:  # (M) since this is the player's board, we check the matrix to see if there are any ships at the spot
                 ship_size = player.board[y][x]  # (M) get the type of ship from the player's board
-                ship_color = settings.SHIPCOLORS.get(ship_size, (
-                0, 255, 0))  # (M) get the type of color from matching it to the global colors
-                pygame.draw.rect(screen, ship_color, pyRect)  # (M) draw the colored square onto the board
+                ship_image = settings.SHIPCOLORS.get(ship_size)  # (M) get the type of color from matching it to the global colors
+                pygame.Surface.blit(screen, ship_image, pyRect)
+                # pygame.draw.rect(screen, ship_color, pyRect)  # (M) draw the colored square onto the board
             if enemy.guesses[y][x] != 0:  # (N) showing hits and misses on the player's own ships
                 if enemy.guesses[y][
                     x] == 'hit':  # (N) check through the enemy's guessses and mark spots as red, blue, or gray for hits, misses, and ships that are sunk respectively
