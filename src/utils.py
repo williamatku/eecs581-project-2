@@ -130,7 +130,8 @@ def startBoard(screen, count,
                     ship_size = player.board[y][
                         x]  # (A) find the type of ship/ship size by checking the player's board
                     ship_image = settings.SHIPCOLORS.get(ship_size)  # (A) get the color corresponding to the type of ship
-                    pygame.Surface.blit(screen, ship_image, pyRect)
+                    ship_image = pygame.transform.scale(ship_image, (settings.BLOCKHEIGHT, settings.BLOCKWIDTH)) #Scaling the image to size of game tiles
+                    pygame.Surface.blit(screen, ship_image, pyRect) #Places ship where user choses.
                     # pygame.draw.rect(screen, ship_color, pyRect)  # (A) draw the block with the ship's color
 
                 pygame.draw.rect(screen, lineColor, pyRect,
@@ -189,7 +190,8 @@ def drawBoard(screen, player, enemy):  # (M) function that draws the board in th
                 x] != 0:  # (M) since this is the player's board, we check the matrix to see if there are any ships at the spot
                 ship_size = player.board[y][x]  # (M) get the type of ship from the player's board
                 ship_image = settings.SHIPCOLORS.get(ship_size)  # (M) get the type of color from matching it to the global colors
-                pygame.Surface.blit(screen, ship_image, pyRect)
+                ship_image = pygame.transform.scale(ship_image, (settings.BLOCKHEIGHT, settings.BLOCKWIDTH)) #transforms the ship image to fit inside the square
+                pygame.Surface.blit(screen, ship_image, pyRect) #Displays ship image to screen where player choses.
                 # pygame.draw.rect(screen, ship_color, pyRect)  # (M) draw the colored square onto the board
             if enemy.guesses[y][x] != 0:  # (N) showing hits and misses on the player's own ships
                 if enemy.guesses[y][
