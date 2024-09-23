@@ -13,6 +13,8 @@ authors = [
     { name = "Thapa, Anil", email = "anilthapa@ku.edu" },
     { name = "William Morris", email= "william@morriswa.org" },
     { name = "Rahul Bhattachan", email= "rahulab590@gmail.com" },
+    { name = "Makenna Loewenherz", email= "makennaloewenherz@gmail.com" },
+    { name = "Timothy Holmes", email=" " }
 ]
 description = "Pygame Battleship"
 requires-python = ">=3.12"
