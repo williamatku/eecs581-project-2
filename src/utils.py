@@ -12,22 +12,39 @@ def playSound(sound):
         pygame.mixer.Sound(py_sound).play()
 
 
-def drawLabels(screen, xOffset,
-               yOffset):  # (M) function to just draw labels on the board as required by the rubric, offsets are so it does not collide with board
-    font = pygame.font.Font(None,
-                            26)  # (M) font object initialization, with a None reference to any existing font, and 26 as the size
+def createText(font_size, text, color):
+    py_font = settings.FONTS.get(font_size)
+    if py_font is None:
+        raise NotImplementedError(f'no font size defined in settings.py with name {font_size}')
+    else:
+        return (pygame.font
+                .Font(py_font[0], py_font[1])
+                .render(text, True, color)
+                )
+
+
+def drawLabels(screen, xOffset, yOffset):
+    """ (M) function to just draw labels on the board as required by the rubric,
+        offsets are so it does not collide with board
+    """
+
+    # (M) font object initialization, with a None reference to any existing font, and 26 as the size
     for i in range(settings.COLS):  # (M) for every column...
-        label = font.render(chr(65 + i), True, (
-        5, 5, 5))  # (M) have a font render itself on the screen, starting with chr(65+i) which starts as A
-        screen.blit(label, (xOffset + i * settings.BLOCKWIDTH + settings.BLOCKWIDTH // 2 - label.get_width() // 2,
-                            yOffset - 25))  # (M) push this rendered font to the top of the screen, and space it out on the side with i * BLOCKWIDTH
+        # (M) have a font render itself on the screen, starting with chr(65+i) which starts as A
+        label = createText('sm', chr(65 + i), (5, 5, 5))
+        screen.blit(
+            label,
+            (
+                xOffset + i * settings.BLOCKWIDTH + settings.BLOCKWIDTH // 2 - label.get_width() // 2,
+                yOffset - 25
+            )
+        )  # (M) push this rendered font to the top of the screen, and space it out on the side with i * BLOCKWIDTH
 
     for i in range(settings.ROWS):  # (M) for every row...
-        label = font.render(str(i + 1), True, (
-        5, 5, 5))  # (M) have the font render itself, this time just str() to convert the numbers into a string
+        label = createText('sm', str(i + 1), (5, 5, 5))
+        # (M) have the font render itself, this time just str() to convert the numbers into a string
         screen.blit(label, (xOffset - 25,
                             yOffset + i * settings.BLOCKHEIGHT + settings.BLOCKHEIGHT // 2 - label.get_height() // 2))  # (M) push again to the to pof the screen with blit and space it out with i * BLOCKHEIGHT
-
 
 
 def drawBoard(screen, player, enemy):  # (M) function that draws the board in the main game loop
@@ -42,8 +59,9 @@ def drawBoard(screen, player, enemy):  # (M) function that draws the board in th
             pyRect = (x * settings.BLOCKWIDTH + xOffset, y * settings.BLOCKHEIGHT + topOffset, settings.BLOCKWIDTH,
                       settings.BLOCKHEIGHT)  # (M) create a tuple for the rectangle object (x, y, width, height)
             pygame.draw.rect(screen, lineColor, pyRect, 1)  # (M) at the same time, we draw the grids for the board
-            if player.guesses[y][
-                x] != 0:  # (M) if the guess board does not have 0 at the guess matrix, it has one of 3 conditions
+
+            # (M) if the guess board does not have 0 at the guess matrix, it has one of 3 conditions
+            if player.guesses[y][x] != 0:
                 if player.guesses[y][x] == 'hit':  # (M) the guess was a hit
                     pygame.draw.rect(screen, (255, 0, 0), pyRect)  # (M) draw red on the spot for a hit
                 elif player.guesses[y][x] == 'miss':  # (M) the guess was a miss
@@ -51,23 +69,26 @@ def drawBoard(screen, player, enemy):  # (M) function that draws the board in th
                 elif player.guesses[y][x] == 'sunk':  # (N) if the ship is sunk
                     pygame.draw.rect(screen, (128, 128, 128), pyRect)  # (N) draw the spot as gray
 
-    drawLabels(screen, xOffset,
-               bottomOffset)  # (M) now draw the labels but on the bottom board, so we use bottom offset
+    # (M) now draw the labels but on the bottom board, so we use bottom offset
+    drawLabels(screen, xOffset, bottomOffset)
+
     for x in range(settings.COLS):  # (M) iterate through all the columns and rows again
         for y in range(settings.ROWS):
             pyRect = (x * settings.BLOCKWIDTH + xOffset, y * settings.BLOCKHEIGHT + bottomOffset, settings.BLOCKWIDTH,
                       settings.BLOCKHEIGHT)  # (M) same as above, we create a tuple for the rectangle (x, y, width, height)
             pygame.draw.rect(screen, lineColor, pyRect,
                              1)  # (M) and just like with the top board, draw the grids for the board
-            if player.board[y][
-                x] != 0:  # (M) since this is the player's board, we check the matrix to see if there are any ships at the spot
+
+            # (M) since this is the player's board, we check the matrix to see if there are any ships at the spot
+            if player.board[y][x] != 0:
                 ship_size = player.board[y][x]  # (M) get the type of ship from the player's board
                 ship_color = settings.SHIPCOLORS.get(ship_size, (
                 0, 255, 0))  # (M) get the type of color from matching it to the global colors
                 pygame.draw.rect(screen, ship_color, pyRect)  # (M) draw the colored square onto the board
             if enemy.guesses[y][x] != 0:  # (N) showing hits and misses on the player's own ships
-                if enemy.guesses[y][
-                    x] == 'hit':  # (N) check through the enemy's guessses and mark spots as red, blue, or gray for hits, misses, and ships that are sunk respectively
+
+                # (N) check through the enemy's guessses and mark spots as red, blue, or gray for hits, misses, and ships that are sunk respectively
+                if enemy.guesses[y][x] == 'hit':
                     pygame.draw.rect(screen, (255, 0, 0), pyRect)  # (N) hit means red
                 elif enemy.guesses[y][x] == 'miss':  # (N) miss means blue
                     pygame.draw.rect(screen, (0, 0, 255), pyRect)
@@ -75,15 +96,68 @@ def drawBoard(screen, player, enemy):  # (M) function that draws the board in th
                     pygame.draw.rect(screen, (128, 128, 128), pyRect)
 
 
-def handlePlayerTurn(screen, currentPlayer,
-                     enemy):  # (N) function that handles the current player's turn. When a click event happens on the guess board, check for a hit or miss and update board accordingly. Some code taken from ChatGPT but mostly changed to fix errors
+def handleHit(screen):
+    hit_text = createText(
+        'med',
+        'HIT! Please turn the screen to the next player',
+        (255, 0, 0)
+    )  # (N) essentially this is just a text fill on the screen that will indicate that it is a hit if the check_hit function returns True
+    screen.fill("skyblue")  # (N) fill screen with color bue
+    playSound('explosion')
+    screen.blit(
+        hit_text,
+        (
+            settings.GAMEWIDTH // 2 - hit_text.get_width() // 2,
+            settings.GAMEHEIGHT // 2
+        )
+    )  # (N) display the hit text on the screen
+    pygame.display.flip()  # (N) update display
+
+
+def handleMiss(screen):
+    # (N) or if it was the miss do the exact same thing as for a hit but instead of "Hit" being displayed, put "Miss" instead
+    miss_text = createText(
+        'med',
+        'MISS! Please turn the screen to the next player',
+        (0, 0, 255)
+    )
+    screen.fill("skyblue")
+    playSound('missed')
+    screen.blit(miss_text, (settings.GAMEWIDTH // 2 - miss_text.get_width() // 2, settings.GAMEHEIGHT // 2))
+    pygame.display.flip()
+
+
+def handleWin(screen, currentPlayer, enemy):
+    # (N) display the current player # and that they have won the game
+    winner_text = createText(
+        'lg',
+        f"Player {currentPlayer.num} Wins!",
+        (255, 0, 0)
+    )
+    screen.fill("skyblue")
+    screen.blit(
+        winner_text,
+        (
+            settings.GAMEWIDTH // 2 - winner_text.get_width() // 2,
+            settings.GAMEHEIGHT // 2
+        )
+    )
+    pygame.display.flip()
+    pygame.time.wait(3000)  # (N) wait a bit
+    return False, currentPlayer, enemy  # (N) then return False to end the game
+
+
+def handlePlayerTurn(screen, currentPlayer, enemy):
+    """  # (N) function that handles the current player's turn.
+        When a click event happens on the guess board, check for a hit or miss and update board accordingly.
+        Some code taken from ChatGPT but mostly changed to fix errors
+    """
     waiting_for_input = True  # (A) wait for input so the screen doesn't instantly move
     x_offset = 150  # (N) setting virtical and horizontal offset to specify the guess board on top
     y_offset = 30
-    font = pygame.font.Font(None, 36)  # (N) just a font to use when text will be displayed
     while waiting_for_input:  # (A) input waiting loop
-        drawBoard(screen, currentPlayer,
-                  enemy)  # (A) draw the board based on player/enemy data (top is guesses, bottom is player)
+        # (A) draw the board based on player/enemy data (top is guesses, bottom is player)
+        drawBoard(screen, currentPlayer, enemy)
         pygame.display.flip()  # (A) update the screen with the rendered boards, and then wait for player to make a decision
 
         for event in pygame.event.get():  # (N) checking for events
@@ -94,110 +168,46 @@ def handlePlayerTurn(screen, currentPlayer,
 
                     mouseX, mouseY = pygame.mouse.get_pos()  # (N) get the position of the mouse
 
-                    gridX = (
-                                        mouseX - x_offset) // settings.BLOCKWIDTH  # (N) looking for the specific position on the actual board
+                    # (N) looking for the specific position on the actual board
+                    gridX = (mouseX - x_offset) // settings.BLOCKWIDTH
                     gridY = (mouseY - y_offset) // settings.BLOCKHEIGHT
 
                     if 0 <= gridX < settings.COLS and 0 <= gridY < settings.ROWS:  # (N) making sure the click is occuring on the guess board or it will not be inputted
                         if currentPlayer.guesses[gridY][gridX] == 0:  # (N) if the square hasn't been shot before
-                            if currentPlayer.check_hit(enemy, gridX,
-                                                       gridY):  # (N) check if it was a hit or miss using the check_hit function
-                                hit_text = font.render('HIT! Please turn the screen to the next player', True, (255, 0,
-                                                                      0))  # (N) essentially this is just a text fill on the screen that will indicate that it is a hit if the check_hit function returns True
-                                screen.fill("skyblue")  # (N) fill screen with color bue
-                                playSound('explosion')
-                                screen.blit(hit_text, (settings.GAMEWIDTH // 2 - hit_text.get_width() // 2,
-                                                       settings.GAMEHEIGHT // 2))  # (N) display the hit text on the screen
-                                pygame.display.flip()  # (N) update display
-                                pygame.time.wait(settings.TURN_TIME_OUT_SECONDS * 1000)  # (N) wait a bit so the hit shows for a little bit
-                                
+                            # (N) check if it was a hit or miss using the check_hit function
+                            if currentPlayer.check_hit(enemy, gridX, gridY):
+                               handleHit(screen)
                             else:
-                                miss_text = font.render('MISS! Please turn the screen to the next player', True, (0, 0,
-                                                                        255))  # (N) or if it was the miss do the exact same thing as for a hit but instead of "Hit" being displayed, put "Miss" instead
-                                screen.fill("skyblue")
-                                playSound('missed')
-                                screen.blit(miss_text, (settings.GAMEWIDTH // 2 - miss_text.get_width() // 2, settings.GAMEHEIGHT // 2))
-                                pygame.display.flip()
-                                pygame.time.wait(settings.TURN_TIME_OUT_SECONDS * 1000)
-                            drawBoard(screen, currentPlayer,
-                                      enemy)  # (N) redraw the board to show a hit or miss on the screen
-                            if check_for_win(
-                                    enemy):  # (N) check for a win by calling the function on the enemy, if that is the case and the current player has won
-                                font = pygame.font.Font(None,
-                                                        48)  # (N) display the current player # and that they have won the game
-                                winner_text = font.render(f"Player {currentPlayer.num} Wins!", True, (255, 0, 0))
-                                screen.fill("skyblue")
-                                screen.blit(winner_text,
-                                            (settings.GAMEWIDTH // 2 - winner_text.get_width() // 2, settings.GAMEHEIGHT // 2))
-                                pygame.display.flip()
-                                pygame.time.wait(3000)  # (N) wait a bit
-                                return False, currentPlayer, enemy  # (N) then return False to end the game
-                            waiting_for_input = False  # (N) if the game isn't over just set waiting_for_input to be false so that the while loop ends
+                               handleMiss(screen)
+                            pygame.time.wait(settings.TURN_TIME_OUT_SECONDS * 1000)
+
+                            # (N) redraw the board to show a hit or miss on the screen
+                            drawBoard(screen, currentPlayer, enemy)
+
+                            # (N) check for a win by calling the function on the enemy, if that is the case and the current player has won
+                            if check_for_win(enemy):
+                                return handleWin(screen, currentPlayer, enemy)
+
+                            # (N) if the game isn't over just set waiting_for_input to be false so that the while loop ends
+                            waiting_for_input = False
 
     return True, currentPlayer, enemy  # (N) if the game isn't over, return true to keep the game going and swap the roles to make it the enemy's turn instead
+
 
 def aiHardMode(screen, currentPlayer, enemy):
     drawBoard(screen, currentPlayer, enemy)
 
 
-def check_for_win(player):  # (N) very quick function to check if the current player has won the game by looking at the enemy's ships that have been sunk to see if all of them have been sunk. Adapted from ChatGPT
-    return all(player.sunk_ships.get(ship_size, False) for ship_size in
-               player.ships)  # (N) this will check to see if all of the player's ships (which in the program is called as the enemy for the function call) are sunk.
+def check_for_win(player):
+    """
+        very quick function to check if the current player has won the game
+        by looking at the enemy's ships that have been sunk to see if all of them have been sunk.
+        Adapted from ChatGPT
+    """
+
+    # (N) this will check to see if all of the player's ships (which in the program is called as the enemy for the function call) are sunk.
     # (N) This is done by checking if every ship in the enemy's ships placed are present in their dicts of ships that are sunk. If that is the case then return true, otherwise return false because the game is not won yet
-
-
-def showModeSelection(screen):
-    # Fonts for the buttons
-    font = pygame.font.Font(None, 36)
-
-    # Text for the buttons
-    ai_text = font.render("PVC", True, (255, 255, 255))  # White text for better contrast
-    player_text = font.render("PVP", True, (255, 255, 255))
-
-    # Button dimensions and positions
-    button_width = 300
-    button_height = 60
-    ai_button_rect = pygame.Rect((settings.GAMEWIDTH // 2 - button_width // 2, 200), (button_width, button_height))
-    player_button_rect = pygame.Rect((settings.GAMEWIDTH // 2 - button_width // 2, 300), (button_width, button_height))
-
-    running = True
-    while running:
-        screen.fill("skyblue")  # Clear screen with sky blue background
-
-        # Add shadow effect for the buttons
-        shadow_offset = 5
-        pygame.draw.rect(screen, (0, 100, 0), ai_button_rect.move(shadow_offset, shadow_offset), border_radius=10)
-        pygame.draw.rect(screen, (0, 100, 0), player_button_rect.move(shadow_offset, shadow_offset), border_radius=10)
-
-        # Draw the buttons with rounded corners
-        pygame.draw.rect(screen, (0, 200, 0), ai_button_rect, border_radius=10)  # Rounded corners with border_radius
-        pygame.draw.rect(screen, (0, 200, 0), player_button_rect, border_radius=10)
-
-        # Draw the text on the buttons
-        screen.blit(ai_text, (
-        ai_button_rect.centerx - ai_text.get_width() // 2, ai_button_rect.centery - ai_text.get_height() // 2))
-        screen.blit(player_text, (player_button_rect.centerx - player_text.get_width() // 2,
-                                  player_button_rect.centery - player_text.get_height() // 2))
-
-        pygame.display.flip()  # Update screen
-
-        # Event handling
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                mouse_pos = event.pos
-
-                # Check if clicked on AI button
-                if ai_button_rect.collidepoint(mouse_pos):
-                    print("AI mode selected")  # Placeholder until AI functionality is complete
-                    running = False
-                    return "AI"
-
-                # Check if clicked on Play Against Player button
-                if player_button_rect.collidepoint(mouse_pos):
-                    print("Player mode selected")
-                    running = False
-                    return "Player"
-
+    return all(
+        player.sunk_ships.get(ship_size, False)
+        for ship_size in player.ships
+    )

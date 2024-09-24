@@ -1,4 +1,5 @@
 from pathlib import Path
+import pygame
 
 BASE_PATH = Path(__file__).resolve().parent.parent
 STATIC_PATH = BASE_PATH.joinpath('static')
@@ -14,4 +15,10 @@ SHIPCOLORS = {1: (255, 100, 100), 2: (100, 255, 100), 3: (100, 100, 255), 4: (25
 SOUNDS = {
     'explosion': STATIC_PATH.joinpath('sounds/explosion.mp3'),
     'missed': STATIC_PATH.joinpath('sounds/missed.mp3')
+}
+
+FONTS = {
+    'sm': (None, 26),
+    'med': (None, 36),
+    'lg': (None, 48)
 }

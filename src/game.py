@@ -20,7 +20,6 @@ from models import Player
 
 def start_game(): # (A) main function that starts the game
     pygame.init() # (A) initialize the pygame engine so it can listen for inputs/handle screens
-    pygame.mixer.init()  # init pygame mixer so sounds can be played
     pygame.display.set_caption("battleship") # (A) set up the title of the game
     game = True # (A) game conditional loop
 
