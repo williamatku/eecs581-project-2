@@ -10,18 +10,30 @@ BLOCKHEIGHT, BLOCKWIDTH = 30, 30 # (A) height of each block for the board
 GAMEHEIGHT, GAMEWIDTH = 700, 600 # (A) height/width of the actual game window
 TURN_TIME_OUT_SECONDS = 3
 
-SHIPCOLORS = {1: (255, 100, 100), 2: (100, 255, 100), 3: (100, 100, 255), 4: (255, 255, 100), 5: (255, 100, 255)} # (A) global colors for different type of ships
+COLORS = {
+    'black': (0, 0, 0),
+    'white': (255, 255, 255),
+    'start-menu-text': (5, 5, 5)
+}
+
+SHIPCOLORS = {
+    1: (255, 100, 100),
+    2: (100, 255, 100),
+    3: (100, 100, 255),
+    4: (255, 255, 100),
+    5: (255, 100, 255)
+} # (A) global colors for different type of ships
 
 SOUNDS = {
     'explosion': STATIC_PATH.joinpath('sounds/explosion.mp3'),
     'missed': STATIC_PATH.joinpath('sounds/missed.mp3')
 }
 
-FONTS = {
-    'xs': (None, 16),
-    'sm': (None, 26),
-    'med': (None, 36),
-    'lg': (None, 48)
+FONT_SIZES = {
+    'xs': 16,
+    'sm': 26,
+    'med': 36,
+    'lg': 48,
 }
 
 BACKGROUND_COLOR = "skyblue"

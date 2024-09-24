@@ -4,19 +4,29 @@ import sys
 
 import settings
 from models import Player, PlayerTurn
-from utils import drawLabels, createText, drawBackground
+from utils import drawLabels, createText, drawBackground, getRGBColor, getFontSizePx
 
 
 def showStartMenu():  # (M) initial screen that determines how many ships the players will deal with
 
     screen = pygame.display.get_surface()
 
-    title = createText('lg', "Battleship", (5, 5, 5))  # (M) titleFont refers to the font initialized earlier
-    # (M) font.render(phrase, antialiasing, color, background) is self explanatory (background is not mandatory)
-    prompt = createText('med', "How many ships would you like? (1-5)", (5, 5, 5))
-    # (M) by rendering, it's drawing these texts on the surface or "screen" we passed in earlier
-    startText = createText('med', "Press ENTER to start", (5, 5, 5))
-    disclaimer = createText('sm', "Use the up and down arrows to adjust the # of ships", (5, 5, 5))
+    title = createText("Battleship", {
+        'font-size': getFontSizePx('lg'),
+        'color': getRGBColor('start-menu-text')
+    })
+    prompt = createText("How many ships would you like? (1-5)", {
+        'font-size': getFontSizePx('med'),
+        'color': getRGBColor('start-menu-text')
+    })
+    startText = createText("Press ENTER to start", {
+        'font-size': getFontSizePx('med'),
+        'color': getRGBColor('start-menu-text')
+    })
+    disclaimer = createText("Use the up and down arrows to adjust the # of ships", {
+        'font-size': getFontSizePx('sm'),
+        'color': getRGBColor('start-menu-text')
+    })
 
     ship_count = 1  # (M) minimum number of ships we can play with is one
     running = True  # (M) conditional for the game loop to continue
@@ -36,7 +46,10 @@ def showStartMenu():  # (M) initial screen that determines how many ships the pl
                     (settings.GAMEWIDTH // 2 - disclaimer.get_width() // 2, 450))  # (M) placing another text onto the screen
 
         # (M) new text to render inside the loop because it's dependent on the count of what the user has chosen
-        count_text = createText('med', str(ship_count), (5, 5, 5))
+        count_text = createText(str(ship_count),{
+            'font-size': getFontSizePx('med'),
+            'color': getRGBColor('start-menu-text')
+        })
         screen.blit(count_text, (
             settings.GAMEWIDTH // 2 - count_text.get_width() // 2,
             300

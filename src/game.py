@@ -13,14 +13,14 @@ import pygame
 import settings
 import sys
 
-from utils import handlePlayerTurn, drawBackground, get_screen
+from utils import handlePlayerTurn, drawBackground, getScreen, createText, getRGBColor, getFontSizePx
 from views import showStartMenu, showGameView, showAIModeSelection, showTurnTransitionScreen, showOpponentSelection
 from models import Player
 
 
 def pvp(ship_count):
 
-    screen = get_screen()
+    screen = getScreen()
     clock = pygame.time.Clock() # (A) clock that keeps track of how many times the screen is updated
 
     playerOne = Player(1)  # (A) initialize playerOne, with a Player(num)-- num marker of 1 to differentiate
@@ -42,8 +42,10 @@ def pvp(ship_count):
             showTurnTransitionScreen('1')
             setUp = False  # (A) set condition to false, won't run again for remainder of the game
         else:  # (A) when the boards have been set up
-            font = pygame.font.Font(None, 28)  # (A) font object with no font type and 28 font size
-            turn_text = font.render(f"Player {currentPlayer.num}'s Turn", True, (5, 5, 5))  # (A) render the text
+            turn_text = createText(f"Player {currentPlayer.num}'s Turn", {
+                'font-size': getFontSizePx('sm'),
+                'color': getRGBColor('start-menu-text')
+            })  # (A) render the text
             screen.blit(turn_text, (
                 settings.GAMEWIDTH // 2 - turn_text.get_width() // 2,
                 350
@@ -64,7 +66,7 @@ def pvp(ship_count):
 
 def pvc_hard(count):
 
-    screen = get_screen()
+    screen = getScreen()
     clock = pygame.time.Clock() # (A) clock that keeps track of how many times the screen is updated
 
     print("You chose hard mode!")
@@ -82,13 +84,17 @@ def pvc_hard(count):
     setUp = True  # (A) check that'll only run the startBoard() once for ships
 
     while game:
-        drawBackground(screen)
+        drawBackground()
         font = pygame.font.Font(None, 28)  # (A) font object with no font type and 28 font size
-        turn_text = font.render(f"Player {playerOne.num}'s Turn", True, (5, 5, 5))  # (A) render the text
-        screen.blit(turn_text, (settings.GAMEWIDTH // 2 - turn_text.get_width() // 2,
-                                350))  # (A) push the rendered text to the top of the screen, placed horizontal and in the middle vertically
-        game, currentPlayer, enemy = handlePlayerTurn(screen, currentPlayer,
-                                                      enemy)  # (A) handle the player turn, will swap players (curr/enemy) after each successful playerturn
+        turn_text = createText(f"Player {playerOne.num}'s Turn", {
+            'color': (5, 5, 5),
+            'font-size': getFontSizePx('med'),
+        })  # (A) render the text
+
+        # (A) push the rendered text to the top of the screen, placed horizontal and in the middle vertically
+        screen.blit(turn_text, (settings.GAMEWIDTH // 2 - turn_text.get_width() // 2, 350))
+        # (A) handle the player turn, will swap players (curr/enemy) after each successful playerturn
+        game, currentPlayer, enemy = handlePlayerTurn(currentPlayer, enemy)
         if game:  # (A) if the game is still going on... may be a redundant conditional in hindsight
             currentPlayer, enemy = enemy, currentPlayer  # (A) then swap the two players
 

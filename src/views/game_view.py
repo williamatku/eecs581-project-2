@@ -3,27 +3,28 @@ import pygame
 
 import settings
 from models import Player, PlayerTurn
-from utils import drawLabels, createText, drawBackground, get_screen
+from utils import drawLabels, createText, drawBackground, getScreen, getFontSizePx, getRGBColor
 
 
 def showGameView(count, player):  # (A) startboard will have the user (current player) set up their board based on the count given
 
-    screen = get_screen()
+    screen = getScreen()
     lineColor = (255, 255, 255)  # (A) color for the grid/matrix lines; should be (255, 255, 255) or white
     yOffset = 150  # (A) offset to place the board in the middle of the game screen
     xOffset = 150  # (A) same offset but x-direction
 
     # (A) render the title, note it uses the player.num we initialized Player() with
-    title = createText(
-        'med',
-        f"Place Your Ships Player {player.num}",
-        (5, 5, 5)
-    )
+    title = createText(f"Place Your Ships Player {player.num}",
+    {
+        'font-size': getFontSizePx('med'),
+        'color': getRGBColor('start-menu-text')
+    })
     instruction = createText(
-        'xs',
-        "Press R to rotate your placement. Click to place a ship.",
-        (5, 5, 5)
-    )  # (A) disclaimer on how to rotate and place ships
+    "Press R to rotate your placement. Click to place a ship.",
+    {
+        'font-size': getFontSizePx('xs'),
+        'color': getRGBColor('start-menu-text')
+    })  # (A) disclaimer on how to rotate and place ships
 
     ships = [val + 1
              for val in

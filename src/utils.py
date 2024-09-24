@@ -12,19 +12,37 @@ def playSound(sound):
         pygame.mixer.Sound(py_sound).play()
 
 
-def createText(font_size, text, color):
-    """ creates a pygame rendered text object from fonts defined in settings.py """
-    py_font = settings.FONTS.get(font_size)
-    if py_font is None:
-        raise NotImplementedError(f'no font size defined in settings.py with name {font_size}')
+def getRGBColor(colorName):
+    """ retrieves a color setting from settings.py """
+    color = settings.COLORS.get(colorName)
+    if color is None:
+        raise NotImplementedError(f'no color defined in settings.py with name {colorName}')
     else:
-        return (pygame.font
-                .Font(py_font[0], py_font[1])
-                .render(text, True, color)
-                )
+        return color
 
 
-def get_screen():
+def getFontSizePx(fontName):
+    """ retrieves a font setting from settings.py """
+    font = settings.FONT_SIZES.get(fontName)
+    if font is None:
+        raise NotImplementedError(f'no font size defined in settings.py with name {fontName}')
+    else:
+        return font
+
+
+def createText(text, cust = {}):
+    """ creates a pygame rendered text object from fonts defined in settings.py """
+
+    # default text props
+    font_size = cust.get('font-size') or getFontSizePx('med')
+    color = cust.get('color') or getRGBColor('black')
+    return (pygame.font
+            .Font(None, font_size)
+            .render(text, True, color)
+            )
+
+
+def getScreen():
     """ safely returns screen obj from pygame interface """
     screen = pygame.display.get_surface()
     if screen is None:
@@ -33,7 +51,7 @@ def get_screen():
 
 
 def drawBackground():
-    get_screen().fill(settings.BACKGROUND_COLOR)
+    getScreen().fill(settings.BACKGROUND_COLOR)
 
 
 def drawLabels(screen, xOffset, yOffset):
@@ -44,7 +62,10 @@ def drawLabels(screen, xOffset, yOffset):
     # (M) font object initialization, with a None reference to any existing font, and 26 as the size
     for i in range(settings.COLS):  # (M) for every column...
         # (M) have a font render itself on the screen, starting with chr(65+i) which starts as A
-        label = createText('sm', chr(65 + i), (5, 5, 5))
+        label = createText(chr(65 + i), {
+            'font-size': getFontSizePx('sm'),
+            'color': getRGBColor('start-menu-text')
+        })
         screen.blit(
             label,
             (
@@ -54,7 +75,10 @@ def drawLabels(screen, xOffset, yOffset):
         )  # (M) push this rendered font to the top of the screen, and space it out on the side with i * BLOCKWIDTH
 
     for i in range(settings.ROWS):  # (M) for every row...
-        label = createText('sm', str(i + 1), (5, 5, 5))
+        label = createText(str(i + 1), {
+            'font-size': getFontSizePx('sm'),
+            'color': getRGBColor('start-menu-text')
+        })
         # (M) have the font render itself, this time just str() to convert the numbers into a string
         screen.blit(label, (
             xOffset - 25,
@@ -64,7 +88,7 @@ def drawLabels(screen, xOffset, yOffset):
 
 def drawBoard(player, enemy):  # (M) function that draws the board in the main game loop
 
-    screen = get_screen()
+    screen = getScreen()
 
     lineColor = (255, 255, 255)  # (M) color of the lines
     topOffset = 30  # (M) offset we add so the column labels don't go off the screen for the top board
@@ -128,12 +152,13 @@ def drawBoard(player, enemy):  # (M) function that draws the board in the main g
 
 def handleHit():
 
-    screen = get_screen()
+    screen = getScreen()
 
     hit_text = createText(
-        'med',
         'HIT! Please turn the screen to the next player',
-        (255, 0, 0)
+        {
+            'color': (255, 0, 0),
+        }
     )  # (N) essentially this is just a text fill on the screen that will indicate that it is a hit if the check_hit function returns True
 
     drawBackground()
@@ -150,7 +175,7 @@ def handleHit():
 
 def handleMiss():
 
-    screen = get_screen()
+    screen = getScreen()
 
     # (N) or if it was the miss do the exact same thing as for a hit but instead of "Hit" being displayed, put "Miss" instead
     miss_text = createText(
@@ -170,13 +195,15 @@ def handleMiss():
 
 def handleWin(currentPlayer, enemy):
 
-    screen = get_screen()
+    screen = getScreen()
 
     # (N) display the current player # and that they have won the game
     winner_text = createText(
-        'lg',
         f"Player {currentPlayer.num} Wins!",
-        (255, 0, 0)
+        {
+            'font-size': getFontSizePx('lg'),
+            'color': (255, 0, 0)
+        }
     )
 
     drawBackground()
@@ -198,7 +225,7 @@ def handlePlayerTurn(currentPlayer, enemy):
         Some code taken from ChatGPT but mostly changed to fix errors
     """
 
-    screen = get_screen()
+    screen = getScreen()
 
     waiting_for_input = True  # (A) wait for input so the screen doesn't instantly move
     x_offset = 150  # (N) setting virtical and horizontal offset to specify the guess board on top
