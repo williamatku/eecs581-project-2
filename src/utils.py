@@ -2,6 +2,19 @@ import settings
 import pygame
 import sys
 
+pygame.mixer.init()
+def missed_sound(file): 
+    sound = pygame.mixer.Sound(file)
+    return sound
+
+missed = missed_sound(settings.MISSED_SOUND)
+
+def explosion_sound(file):
+    sound = pygame.mixer.Sound(file)
+    return sound
+
+explosion = explosion_sound(settings.EXPLOSION_SOUND)
+
 def getCount(screen):  # (M) initial screen that determines how many ships the players will deal with
     font = pygame.font.Font(None,
                             36)  # (M) setting the font is an initialization of pygame.font.Font(file, size) where file is if there's already a font type, and size is just the Size
@@ -232,6 +245,7 @@ def handlePlayerTurn(screen, currentPlayer,
                                 hit_text = font.render('HIT! Please turn the screen to the next player', True, (255, 0,
                                                                       0))  # (N) essentially this is just a text fill on the screen that will indicate that it is a hit if the check_hit function returns True
                                 screen.fill("skyblue")  # (N) fill screen with color bue
+                                explosion.play()
                                 screen.blit(hit_text, (settings.GAMEWIDTH // 2 - hit_text.get_width() // 2,
                                                        settings.GAMEHEIGHT // 2))  # (N) display the hit text on the screen
                                 pygame.display.flip()  # (N) update display
@@ -241,6 +255,7 @@ def handlePlayerTurn(screen, currentPlayer,
                                 miss_text = font.render('MISS! Please turn the screen to the next player', True, (0, 0,
                                                                         255))  # (N) or if it was the miss do the exact same thing as for a hit but instead of "Hit" being displayed, put "Miss" instead
                                 screen.fill("skyblue")
+                                missed.play()
                                 screen.blit(miss_text, (settings.GAMEWIDTH // 2 - miss_text.get_width() // 2, settings.GAMEHEIGHT // 2))
                                 pygame.display.flip()
                                 pygame.time.wait(settings.TURN_TIME_OUT_SECONDS * 1000)
