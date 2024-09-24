@@ -13,7 +13,8 @@ import pygame
 import settings
 import sys
 
-from utils import getCount, startBoard, handlePlayerTurn, showModeSelection, showTurnTransitionScreen
+from utils import handlePlayerTurn
+from views import showStartMenu, showInitialGameView, showAIModeSelection, showTurnTransitionScreen
 from models import Player
 
 
@@ -26,11 +27,11 @@ def main(): # (A) main function that starts the game
     screen = pygame.display.set_mode((settings.GAMEWIDTH, settings.GAMEHEIGHT)) # (A) the main screen that gets passed around, initialized with a display of GAMEWIDTH and GAMEHEIGHT
     clock = pygame.time.Clock() # (A) clock that keeps track of how many times the screen is updated
 
-    count = getCount(screen)  # (A) initial getCount() will be the default starting screen to find how many ships to play with
+    count = showStartMenu(screen)  # (A) initial getCount() will be the default starting screen to find how many ships to play with
     setUp = True  # (A) check that'll only run the startBoard() once for ships
 
     # Call the mode selection screen
-    mode = showModeSelection(screen)
+    mode = showAIModeSelection(screen)
 
 
     if mode == "Player":  # If the user selected to play against another player
@@ -45,9 +46,9 @@ def main(): # (A) main function that starts the game
         while game: # (A) while the game is running
             screen.fill("skyblue") # (A) fill the background with skyblue
             if setUp: # (A) conditional met with first time run of the loop
-                startBoard(screen, count, playerOne) # (A) create the matrix for playerOne with ship selection
+                showInitialGameView(screen, count, playerOne) # (A) create the matrix for playerOne with ship selection
                 showTurnTransitionScreen(screen, '2')
-                startBoard(screen, count, playerTwo) # (A) do the same for playerTwo
+                showInitialGameView(screen, count, playerTwo) # (A) do the same for playerTwo
                 showTurnTransitionScreen(screen, '1')
                 setUp = False # (A) set condition to false, won't run again for remainder of the game
             else: # (A) when the boards have been set up

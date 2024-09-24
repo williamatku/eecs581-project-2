@@ -1,5 +1,9 @@
 import settings
 
+
+type PlayerTurn = '1' | '2'
+
+
 class Player:  # stores the data for each player so we can alternate easily with each turn based on the Player data
     def __init__(self, num):  # (A) initialization
         self.num = num  # (A) player num to keep track of who's who  without anything fancy
