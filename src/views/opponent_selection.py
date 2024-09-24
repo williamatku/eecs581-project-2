@@ -3,16 +3,13 @@ import pygame
 
 import settings
 from models import Player, PlayerTurn
-from utils import drawLabels
+from utils import drawLabels, createText
 
 
 def showOpponentSelection(screen):
-    # Fonts for the buttons
-    font = pygame.font.Font(None, 36)
-
     # Text for the buttons
-    ai_text = font.render("PVC", True, (255, 255, 255))  # White text for better contrast
-    player_text = font.render("PVP", True, (255, 255, 255))
+    ai_text = createText('med', "PVC", (255, 255, 255))  # White text for better contrast
+    player_text = createText('med', "PVP", (255, 255, 255))
 
     # Button dimensions and positions
     button_width = 300
@@ -35,9 +32,13 @@ def showOpponentSelection(screen):
 
         # Draw the text on the buttons
         screen.blit(ai_text, (
-        ai_button_rect.centerx - ai_text.get_width() // 2, ai_button_rect.centery - ai_text.get_height() // 2))
-        screen.blit(player_text, (player_button_rect.centerx - player_text.get_width() // 2,
-                                  player_button_rect.centery - player_text.get_height() // 2))
+            ai_button_rect.centerx - ai_text.get_width() // 2,
+            ai_button_rect.centery - ai_text.get_height() // 2
+        ))
+        screen.blit(player_text, (
+            player_button_rect.centerx - player_text.get_width() // 2,
+            player_button_rect.centery - player_text.get_height() // 2
+        ))
 
         pygame.display.flip()  # Update screen
 

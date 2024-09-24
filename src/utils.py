@@ -13,6 +13,7 @@ def playSound(sound):
 
 
 def createText(font_size, text, color):
+    """ creates a pygame rendered text object from fonts defined in settings.py """
     py_font = settings.FONTS.get(font_size)
     if py_font is None:
         raise NotImplementedError(f'no font size defined in settings.py with name {font_size}')
@@ -21,6 +22,10 @@ def createText(font_size, text, color):
                 .Font(py_font[0], py_font[1])
                 .render(text, True, color)
                 )
+
+
+def drawBackground(screen):
+    screen.fill(settings.BACKGROUND_COLOR)
 
 
 def drawLabels(screen, xOffset, yOffset):
@@ -43,8 +48,10 @@ def drawLabels(screen, xOffset, yOffset):
     for i in range(settings.ROWS):  # (M) for every row...
         label = createText('sm', str(i + 1), (5, 5, 5))
         # (M) have the font render itself, this time just str() to convert the numbers into a string
-        screen.blit(label, (xOffset - 25,
-                            yOffset + i * settings.BLOCKHEIGHT + settings.BLOCKHEIGHT // 2 - label.get_height() // 2))  # (M) push again to the to pof the screen with blit and space it out with i * BLOCKHEIGHT
+        screen.blit(label, (
+            xOffset - 25,
+            yOffset + i * settings.BLOCKHEIGHT + settings.BLOCKHEIGHT // 2 - label.get_height() // 2
+        ))  # (M) push again to the to pof the screen with blit and space it out with i * BLOCKHEIGHT
 
 
 def drawBoard(screen, player, enemy):  # (M) function that draws the board in the main game loop
@@ -56,9 +63,15 @@ def drawBoard(screen, player, enemy):  # (M) function that draws the board in th
     drawLabels(screen, xOffset, topOffset)  # (M) draw labels on the top board
     for x in range(settings.COLS):  # (M) iterate through each column
         for y in range(settings.ROWS):  # (M) iterate through each row
-            pyRect = (x * settings.BLOCKWIDTH + xOffset, y * settings.BLOCKHEIGHT + topOffset, settings.BLOCKWIDTH,
-                      settings.BLOCKHEIGHT)  # (M) create a tuple for the rectangle object (x, y, width, height)
-            pygame.draw.rect(screen, lineColor, pyRect, 1)  # (M) at the same time, we draw the grids for the board
+            # (M) create a tuple for the rectangle object (x, y, width, height)
+            pyRect = (
+                x * settings.BLOCKWIDTH + xOffset,
+                y * settings.BLOCKHEIGHT + topOffset,
+                settings.BLOCKWIDTH,
+                settings.BLOCKHEIGHT
+            )
+            # (M) at the same time, we draw the grids for the board
+            pygame.draw.rect(screen, lineColor, pyRect, 1)
 
             # (M) if the guess board does not have 0 at the guess matrix, it has one of 3 conditions
             if player.guesses[y][x] != 0:
@@ -74,10 +87,15 @@ def drawBoard(screen, player, enemy):  # (M) function that draws the board in th
 
     for x in range(settings.COLS):  # (M) iterate through all the columns and rows again
         for y in range(settings.ROWS):
-            pyRect = (x * settings.BLOCKWIDTH + xOffset, y * settings.BLOCKHEIGHT + bottomOffset, settings.BLOCKWIDTH,
-                      settings.BLOCKHEIGHT)  # (M) same as above, we create a tuple for the rectangle (x, y, width, height)
-            pygame.draw.rect(screen, lineColor, pyRect,
-                             1)  # (M) and just like with the top board, draw the grids for the board
+            # (M) same as above, we create a tuple for the rectangle (x, y, width, height)
+            pyRect = (
+                x * settings.BLOCKWIDTH + xOffset,
+                y * settings.BLOCKHEIGHT + bottomOffset,
+                settings.BLOCKWIDTH,
+                settings.BLOCKHEIGHT
+            )
+            # (M) and just like with the top board, draw the grids for the board
+            pygame.draw.rect(screen, lineColor, pyRect,1)
 
             # (M) since this is the player's board, we check the matrix to see if there are any ships at the spot
             if player.board[y][x] != 0:
@@ -85,6 +103,7 @@ def drawBoard(screen, player, enemy):  # (M) function that draws the board in th
                 ship_color = settings.SHIPCOLORS.get(ship_size, (
                 0, 255, 0))  # (M) get the type of color from matching it to the global colors
                 pygame.draw.rect(screen, ship_color, pyRect)  # (M) draw the colored square onto the board
+
             if enemy.guesses[y][x] != 0:  # (N) showing hits and misses on the player's own ships
 
                 # (N) check through the enemy's guessses and mark spots as red, blue, or gray for hits, misses, and ships that are sunk respectively
@@ -102,7 +121,8 @@ def handleHit(screen):
         'HIT! Please turn the screen to the next player',
         (255, 0, 0)
     )  # (N) essentially this is just a text fill on the screen that will indicate that it is a hit if the check_hit function returns True
-    screen.fill("skyblue")  # (N) fill screen with color bue
+
+    drawBackground(screen)
     playSound('explosion')
     screen.blit(
         hit_text,
@@ -121,9 +141,13 @@ def handleMiss(screen):
         'MISS! Please turn the screen to the next player',
         (0, 0, 255)
     )
-    screen.fill("skyblue")
+
+    drawBackground(screen)
     playSound('missed')
-    screen.blit(miss_text, (settings.GAMEWIDTH // 2 - miss_text.get_width() // 2, settings.GAMEHEIGHT // 2))
+    screen.blit(miss_text, (
+        settings.GAMEWIDTH // 2 - miss_text.get_width() // 2,
+        settings.GAMEHEIGHT // 2
+    ))
     pygame.display.flip()
 
 
@@ -134,7 +158,8 @@ def handleWin(screen, currentPlayer, enemy):
         f"Player {currentPlayer.num} Wins!",
         (255, 0, 0)
     )
-    screen.fill("skyblue")
+
+    drawBackground(screen)
     screen.blit(
         winner_text,
         (

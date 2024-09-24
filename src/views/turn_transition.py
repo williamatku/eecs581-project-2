@@ -3,16 +3,14 @@ import pygame
 
 import settings
 from models import Player, PlayerTurn
-from utils import drawLabels
+from utils import drawLabels, createText
 
 
 def showTurnTransitionScreen(screen, pturn: PlayerTurn):
-    # Fonts for the buttons
-    font = pygame.font.Font(None, 36)
 
     # Text for the buttons
-    question_text = font.render(f"Player {pturn}, are you ready?", True, (255, 255, 255))  # White text for better contrast
-    confirm_button_text = font.render("Lets Battle", True, (255, 255, 255))
+    question_text = createText('med', f"Player {pturn}, are you ready?", (255, 255, 255))  # White text for better contrast
+    confirm_button_text = createText('med', "Lets Battle", (255, 255, 255))
 
     # Button dimensions and positions
     button_width = 300

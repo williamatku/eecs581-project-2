@@ -3,7 +3,7 @@ import pygame
 
 import settings
 from models import Player, PlayerTurn
-from utils import drawLabels
+from utils import drawLabels, createText
 
 
 def showGameView(screen, count,
@@ -12,14 +12,20 @@ def showGameView(screen, count,
     yOffset = 150  # (A) offset to place the board in the middle of the game screen
     xOffset = 150  # (A) same offset but x-direction
 
-    font = pygame.font.Font(None, 36)  # (A) create a font object with 36 size font
-    smallFont = pygame.font.Font(None, 16)  # (A) create another font object but with 16 for small disclaimers
-    title = font.render(f"Place Your Ships Player {player.num}", True,
-                        (5, 5, 5))  # (A) render the title, note it uses the player.num we initialized Player() with
-    instruction = smallFont.render("Press R to rotate your placement. Click to place a ship.", True,
-                                   (5, 5, 5))  # (A) disclaimer on how to rotate and place ships
+    # (A) render the title, note it uses the player.num we initialized Player() with
+    title = createText(
+        'med',
+        f"Place Your Ships Player {player.num}",
+        (5, 5, 5)
+    )
+    instruction = createText(
+        'xs',
+        "Press R to rotate your placement. Click to place a ship.",
+        (5, 5, 5)
+    )  # (A) disclaimer on how to rotate and place ships
 
-    ships = [val + 1 for val in
+    ships = [val + 1
+             for val in
              range(count)]  # (A) rubric outlines each ship has a val of their count equivalent so [1,2,3.. etc.]
     currentShip = ships.pop()  # (A) we pop the last ship or highest value to start placements with
     direction = 0  # (A) direction by default is 0 which is right-facing
@@ -27,23 +33,30 @@ def showGameView(screen, count,
     waiting = True  # (A) function loop conditional so it doesn't instantly move away from this screen
     while waiting:  # (A) will wait for inputs
         screen.fill("skyblue")  # (A) background will be skyblue
-        screen.blit(title, (settings.GAMEWIDTH // 2 - title.get_width() // 2,
-                            yOffset - 75))  # (A) push the rendered title to the top of the screen with screen.blit()
-        screen.blit(instruction, (settings.GAMEWIDTH // 2 - instruction.get_width() // 2,
-                                  yOffset + 315))  # (A) same with the disclaimer, GAMEWIDTH // 2 - instruction.get_width() // 2 will just center the text
+        screen.blit(title, (
+            settings.GAMEWIDTH // 2 - title.get_width() // 2,
+            yOffset - 75
+        ))  # (A) push the rendered title to the top of the screen with screen.blit()
+        screen.blit(instruction, (
+            settings.GAMEWIDTH // 2 - instruction.get_width() // 2,
+            yOffset + 315
+        ))  # (A) same with the disclaimer, GAMEWIDTH // 2 - instruction.get_width() // 2 will just center the text
 
-        drawLabels(screen, xOffset,
-                   yOffset)  # (A) draw labels on the board as well for clarity, provide offsets to account for different scenarios
-
+        # (A) draw labels on the board as well for clarity, provide offsets to account for different scenarios
+        drawLabels(screen, xOffset, yOffset)
         mouseX, mouseY = pygame.mouse.get_pos()  # (A) pygame.mosue.get_pos() returns (x, y) of the mouse position
-        hoverX = (
-                             mouseX - xOffset) // settings.BLOCKWIDTH  # (A) we disregard the part that the offset adds, then divide by WIDTH to take the board position (1-10)
+        hoverX = (mouseX - xOffset) // settings.BLOCKWIDTH  # (A) we disregard the part that the offset adds, then divide by WIDTH to take the board position (1-10)
         hoverY = (mouseY - yOffset) // settings.BLOCKHEIGHT  # (A) similar to above, we take the Y position that is normalized
 
         for x in range(settings.COLS):  # (A) iterate through each column
             for y in range(settings.ROWS):  # (A) iterate through each row as well to work with specific blocks of the matrix
-                pyRect = (x * settings.BLOCKWIDTH + xOffset, y * settings.BLOCKHEIGHT + yOffset, settings.BLOCKWIDTH,
-                          settings.BLOCKHEIGHT)  # (A) rectangle tuple that replaces a rectangle object with (x, y, width, height)
+                # (A) rectangle tuple that replaces a rectangle object with (x, y, width, height)
+                pyRect = (
+                    x * settings.BLOCKWIDTH + xOffset,
+                    y * settings.BLOCKHEIGHT + yOffset,
+                    settings.BLOCKWIDTH,
+                    settings.BLOCKHEIGHT
+                )
 
                 should_highlight = False  # (A) variable to determine if we should highlight the current square in the loop
                 if 0 <= hoverX < settings.COLS and 0 <= hoverY < settings.ROWS:  # (A) for one, it is mandatory to be within the board to even highlight

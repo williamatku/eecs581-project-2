@@ -18,7 +18,10 @@ SOUNDS = {
 }
 
 FONTS = {
+    'xs': (None, 16),
     'sm': (None, 26),
     'med': (None, 36),
     'lg': (None, 48)
 }
+
+BACKGROUND_COLOR = "skyblue"

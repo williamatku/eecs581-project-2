@@ -1,16 +1,13 @@
 import pygame
 import settings
-import utils
+from utils import createText
 
 
 def showAIModeSelection(screen):
-    # Fonts for the buttons
-    font = pygame.font.Font(None, 36)
-
     # Text for the buttons
-    easy_text = font.render("AI Easy Mode", True, (255, 255, 255))  # White text for better contrast
-    medium_text = font.render("AI Medium Mode", True, (255, 255, 255))
-    hard_text = font.render("AI Hard Mode", True, (255, 255, 255))
+    easy_text = createText('med', "AI Easy Mode", (255, 255, 255))  # White text for better contrast
+    medium_text = createText('med', "AI Medium Mode", (255, 255, 255))
+    hard_text = createText('med', "AI Hard Mode", (255, 255, 255))
 
     # Button dimensions and positions
     button_width = 300
