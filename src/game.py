@@ -18,7 +18,7 @@ from views import showStartMenu, showGameView, showAIModeSelection, showTurnTran
 from models import Player
 
 
-def main(): # (A) main function that starts the game
+def start_game(): # (A) main function that starts the game
     pygame.init() # (A) initialize the pygame engine so it can listen for inputs/handle screens
     pygame.mixer.init()  # init pygame mixer so sounds can be played
     pygame.display.set_caption("battleship") # (A) set up the title of the game
@@ -106,10 +106,3 @@ def main(): # (A) main function that starts the game
                     game = False # (A) game is over
             clock.tick(settings.FPS) # (A) FPS (initialized at the start of the code) will determine refresh rate for the game
 
-
-
-        #return  # Exit the game since AI mode is not yet available
-
-
-if __name__ == "__main__": # (A) basic name=main check so it doesn't automatically run if called in a module
-    main() # (A) if intended, then now run main()
