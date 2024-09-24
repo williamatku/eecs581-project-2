@@ -9,15 +9,17 @@ Author(s): Anil Thapa, Michelle Chen, Nathan Bui
 Creation Date: 09/13/2024
 """
 
-import sys
 import pygame
 import settings
+import sys
 
 from utils import getCount, startBoard, handlePlayerTurn, showModeSelection, showTurnTransitionScreen
 from models import Player
 
+
 def main(): # (A) main function that starts the game
     pygame.init() # (A) initialize the pygame engine so it can listen for inputs/handle screens
+    pygame.mixer.init()  # init pygame mixer so sounds can be played
     pygame.display.set_caption("battleship") # (A) set up the title of the game
     game = True # (A) game conditional loop
 
