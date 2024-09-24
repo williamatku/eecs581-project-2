@@ -2,7 +2,7 @@ import settings
 
 class Player:  # stores the data for each player so we can alternate easily with each turn based on the Player data
     def __init__(self, num):  # (A) initialization
-        self.num = num  # (A) player num to keep track of who's who  without anything fancy
+        self.num = num  # (A) player num to keep track of who's who without anything fancy
         self.board = [[0 for _ in range(settings.COLS)] for _ in
                       range(settings.ROWS)]  # (A) initialize player's matrix based on game board to reflect ship states
         self.guesses = [[0 for _ in range(settings.COLS)] for _ in

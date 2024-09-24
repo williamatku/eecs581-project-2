@@ -13,7 +13,7 @@ import sys
 import pygame
 import settings
 
-from utils import getCount, startBoard, handlePlayerTurn, showModeSelection
+from utils import getCount, startBoard, handlePlayerTurn, showModeSelection, showAISelection, aiHardMode
 from models import Player
 
 def main(): # (A) main function that starts the game
@@ -62,7 +62,45 @@ def main(): # (A) main function that starts the game
 
     elif mode == "AI":  # AI functionality placeholder
         print("AI mode is not implemented yet.")
-        return  # Exit the game since AI mode is not yet available
+        difficulty = showAISelection(screen)
+
+        if difficulty == "Easy":
+            pass
+        elif difficulty == "Medium":
+            pass
+
+        elif difficulty == "Hard":
+            print("You chose hard mode!")
+            playerOne = Player(1) # (A) initialize playerOne, with a Player(num)-- num marker of 1 to differentiate
+            screen.fill("skyblue") # (A) fill the background with skyblue
+
+            # player picks their ships using startBoard
+            startBoard(screen, count, playerOne) # (A) create the matrix for playerOne (only player)
+
+            # AI gets matrix that says where all ships are
+            cheating_board = playerOne.board
+            print(cheating_board)
+
+            while game:
+                screen.fill("skyblue") # (A) fill the background with skyblue
+                font = pygame.font.Font(None, 28) # (A) font object with no font type and 28 font size
+                turn_text = font.render(f"Player {playerOne.num}'s Turn", True, (5, 5, 5)) # (A) render the text
+                screen.blit(turn_text, (settings.GAMEWIDTH // 2 - turn_text.get_width() // 2, 350)) # (A) push the rendered text to the top of the screen, placed horizontal and in the middle vertically
+                game, currentPlayer, enemy = handlePlayerTurn(screen, currentPlayer, enemy) # (A) handle the player turn, will swap players (curr/enemy) after each successful playerturn
+                if game: # (A) if the game is still going on... may be a redundant conditional in hindsight
+                    currentPlayer, enemy = enemy, currentPlayer # (A) then swap the two players
+
+                
+
+            pygame.display.flip() # (A) flip to update the display as needed
+            for event in pygame.event.get(): # (A) listen to events
+                if event.type == pygame.QUIT: # (A) if user exits out
+                    game = False # (A) game is over
+            clock.tick(settings.FPS) # (A) FPS (initialized at the start of the code) will determine refresh rate for the game
+
+
+
+        #return  # Exit the game since AI mode is not yet available
 
 
 if __name__ == "__main__": # (A) basic name=main check so it doesn't automatically run if called in a module
