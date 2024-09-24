@@ -3,7 +3,7 @@ import pygame
 
 import settings
 from models import Player, PlayerTurn
-from utils import drawLabels, createText, drawBackground, getRGBColor, getFontSizePx
+from utils import drawLabels, createText, drawBackground, getPygameColor, getFontSizePx
 
 
 def showOpponentSelection():
@@ -12,11 +12,11 @@ def showOpponentSelection():
     # Text for the buttons
     ai_text = createText("PVC", {
         'font-size': getFontSizePx('med'),
-        'color': getRGBColor('white')
+        'color': getPygameColor('white')
     })  # White text for better contrast
     player_text = createText("PVP", {
         'font-size': getFontSizePx('med'),
-        'color': getRGBColor('white')
+        'color': getPygameColor('white')
     })
 
     # Button dimensions and positions

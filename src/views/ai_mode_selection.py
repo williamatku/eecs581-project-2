@@ -1,6 +1,6 @@
 import pygame
 import settings
-from utils import createText, drawBackground, getScreen, getFontSizePx, getRGBColor
+from utils import createText, drawBackground, getScreen, getFontSizePx, getPygameColor
 
 
 def showAIModeSelection():
@@ -10,15 +10,15 @@ def showAIModeSelection():
     # Text for the buttons
     easy_text = createText("AI Easy Mode", {
         'font-size': getFontSizePx('med'),
-        'color': getRGBColor('white')
+        'color': getPygameColor('white')
     })  # White text for better contrast
     medium_text = createText("AI Medium Mode",{
         'font-size': getFontSizePx('med'),
-        'color': getRGBColor('white')
+        'color': getPygameColor('white')
     })
     hard_text = createText("AI Hard Mode", {
         'font-size': getFontSizePx('med'),
-        'color': getRGBColor('white')
+        'color': getPygameColor('white')
     })
 
     # Button dimensions and positions

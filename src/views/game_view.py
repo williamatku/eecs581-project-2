@@ -3,7 +3,7 @@ import pygame
 
 import settings
 from models import Player, PlayerTurn
-from utils import drawLabels, createText, drawBackground, getScreen, getFontSizePx, getRGBColor
+from utils import drawLabels, createText, drawBackground, getScreen, getFontSizePx, getPygameColor
 
 
 def showGameView(count, player):  # (A) startboard will have the user (current player) set up their board based on the count given
@@ -17,13 +17,13 @@ def showGameView(count, player):  # (A) startboard will have the user (current p
     title = createText(f"Place Your Ships Player {player.num}",
     {
         'font-size': getFontSizePx('med'),
-        'color': getRGBColor('start-menu-text')
+        'color': getPygameColor('start-menu-text')
     })
     instruction = createText(
     "Press R to rotate your placement. Click to place a ship.",
     {
         'font-size': getFontSizePx('xs'),
-        'color': getRGBColor('start-menu-text')
+        'color': getPygameColor('start-menu-text')
     })  # (A) disclaimer on how to rotate and place ships
 
     ships = [val + 1

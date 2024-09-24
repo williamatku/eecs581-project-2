@@ -13,7 +13,7 @@ import pygame
 import settings
 import sys
 
-from utils import handlePlayerTurn, drawBackground, getScreen, createText, getRGBColor, getFontSizePx
+from utils import handlePlayerTurn, drawBackground, getScreen, createText, getPygameColor, getFontSizePx
 from views import showStartMenu, showGameView, showAIModeSelection, showTurnTransitionScreen, showOpponentSelection
 from models import Player
 
@@ -44,7 +44,7 @@ def pvp(ship_count):
         else:  # (A) when the boards have been set up
             turn_text = createText(f"Player {currentPlayer.num}'s Turn", {
                 'font-size': getFontSizePx('sm'),
-                'color': getRGBColor('start-menu-text')
+                'color': getPygameColor('start-menu-text')
             })  # (A) render the text
             screen.blit(turn_text, (
                 settings.GAMEWIDTH // 2 - turn_text.get_width() // 2,

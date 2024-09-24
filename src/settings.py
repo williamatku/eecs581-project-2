@@ -13,7 +13,11 @@ TURN_TIME_OUT_SECONDS = 3
 COLORS = {
     'black': (0, 0, 0),
     'white': (255, 255, 255),
-    'start-menu-text': (5, 5, 5)
+    'background': "skyblue",
+    'start-menu-text': (5, 5, 5),
+    'ship-hit': (255, 0, 0),
+    'ship-miss': (0, 0, 255),
+    'ship-sunk': (128, 128, 128)
 }
 
 SHIPCOLORS = {
@@ -35,5 +39,3 @@ FONT_SIZES = {
     'med': 36,
     'lg': 48,
 }
-
-BACKGROUND_COLOR = "skyblue"

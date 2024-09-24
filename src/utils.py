@@ -12,7 +12,7 @@ def playSound(sound):
         pygame.mixer.Sound(py_sound).play()
 
 
-def getRGBColor(colorName):
+def getPygameColor(colorName):
     """ retrieves a color setting from settings.py """
     color = settings.COLORS.get(colorName)
     if color is None:
@@ -35,7 +35,7 @@ def createText(text, cust = {}):
 
     # default text props
     font_size = cust.get('font-size') or getFontSizePx('med')
-    color = cust.get('color') or getRGBColor('black')
+    color = cust.get('color') or getPygameColor('black')
     return (pygame.font
             .Font(None, font_size)
             .render(text, True, color)
@@ -51,7 +51,7 @@ def getScreen():
 
 
 def drawBackground():
-    getScreen().fill(settings.BACKGROUND_COLOR)
+    getScreen().fill(getPygameColor('background'))
 
 
 def drawLabels(screen, xOffset, yOffset):
@@ -64,7 +64,7 @@ def drawLabels(screen, xOffset, yOffset):
         # (M) have a font render itself on the screen, starting with chr(65+i) which starts as A
         label = createText(chr(65 + i), {
             'font-size': getFontSizePx('sm'),
-            'color': getRGBColor('start-menu-text')
+            'color': getPygameColor('start-menu-text')
         })
         screen.blit(
             label,
@@ -77,7 +77,7 @@ def drawLabels(screen, xOffset, yOffset):
     for i in range(settings.ROWS):  # (M) for every row...
         label = createText(str(i + 1), {
             'font-size': getFontSizePx('sm'),
-            'color': getRGBColor('start-menu-text')
+            'color': getPygameColor('start-menu-text')
         })
         # (M) have the font render itself, this time just str() to convert the numbers into a string
         screen.blit(label, (
@@ -143,11 +143,11 @@ def drawBoard(player, enemy):  # (M) function that draws the board in the main g
 
                 # (N) check through the enemy's guessses and mark spots as red, blue, or gray for hits, misses, and ships that are sunk respectively
                 if enemy.guesses[y][x] == 'hit':
-                    pygame.draw.rect(screen, (255, 0, 0), pyRect)  # (N) hit means red
+                    pygame.draw.rect(screen, getPygameColor('ship-hit'), pyRect)  # (N) hit means red
                 elif enemy.guesses[y][x] == 'miss':  # (N) miss means blue
-                    pygame.draw.rect(screen, (0, 0, 255), pyRect)
+                    pygame.draw.rect(screen, getPygameColor('ship-miss'), pyRect)
                 elif enemy.guesses[y][x] == 'sunk':  # (N) sunk means gray
-                    pygame.draw.rect(screen, (128, 128, 128), pyRect)
+                    pygame.draw.rect(screen, getPygameColor('ship-sunk'), pyRect)
 
 
 def handleHit():
@@ -157,7 +157,7 @@ def handleHit():
     hit_text = createText(
         'HIT! Please turn the screen to the next player',
         {
-            'color': (255, 0, 0),
+            'color': getPygameColor('ship-hit'),
         }
     )  # (N) essentially this is just a text fill on the screen that will indicate that it is a hit if the check_hit function returns True
 
@@ -179,12 +179,14 @@ def handleMiss():
 
     # (N) or if it was the miss do the exact same thing as for a hit but instead of "Hit" being displayed, put "Miss" instead
     miss_text = createText(
-        'med',
         'MISS! Please turn the screen to the next player',
-        (0, 0, 255)
+        {
+            'font-size': getFontSizePx('med'),
+            'color': getPygameColor('ship-miss')
+        }
     )
 
-    drawBackground(screen)
+    drawBackground()
     playSound('missed')
     screen.blit(miss_text, (
         settings.GAMEWIDTH // 2 - miss_text.get_width() // 2,

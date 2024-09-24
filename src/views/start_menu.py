@@ -4,7 +4,7 @@ import sys
 
 import settings
 from models import Player, PlayerTurn
-from utils import drawLabels, createText, drawBackground, getRGBColor, getFontSizePx
+from utils import drawLabels, createText, drawBackground, getPygameColor, getFontSizePx
 
 
 def showStartMenu():  # (M) initial screen that determines how many ships the players will deal with
@@ -13,19 +13,19 @@ def showStartMenu():  # (M) initial screen that determines how many ships the pl
 
     title = createText("Battleship", {
         'font-size': getFontSizePx('lg'),
-        'color': getRGBColor('start-menu-text')
+        'color': getPygameColor('start-menu-text')
     })
     prompt = createText("How many ships would you like? (1-5)", {
         'font-size': getFontSizePx('med'),
-        'color': getRGBColor('start-menu-text')
+        'color': getPygameColor('start-menu-text')
     })
     startText = createText("Press ENTER to start", {
         'font-size': getFontSizePx('med'),
-        'color': getRGBColor('start-menu-text')
+        'color': getPygameColor('start-menu-text')
     })
     disclaimer = createText("Use the up and down arrows to adjust the # of ships", {
         'font-size': getFontSizePx('sm'),
-        'color': getRGBColor('start-menu-text')
+        'color': getPygameColor('start-menu-text')
     })
 
     ship_count = 1  # (M) minimum number of ships we can play with is one
@@ -48,7 +48,7 @@ def showStartMenu():  # (M) initial screen that determines how many ships the pl
         # (M) new text to render inside the loop because it's dependent on the count of what the user has chosen
         count_text = createText(str(ship_count),{
             'font-size': getFontSizePx('med'),
-            'color': getRGBColor('start-menu-text')
+            'color': getPygameColor('start-menu-text')
         })
         screen.blit(count_text, (
             settings.GAMEWIDTH // 2 - count_text.get_width() // 2,
