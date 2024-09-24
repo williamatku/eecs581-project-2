@@ -1,4 +1,4 @@
-
+import logging
 import pygame
 
 import settings
@@ -60,12 +60,12 @@ def showOpponentSelection():
 
                 # Check if clicked on AI button
                 if ai_button_rect.collidepoint(mouse_pos):
-                    print("AI mode selected")  # Placeholder until AI functionality is complete
+                    logging.info("AI mode selected")  # Placeholder until AI functionality is complete
                     running = False
                     return "AI"
 
                 # Check if clicked on Play Against Player button
                 if player_button_rect.collidepoint(mouse_pos):
-                    print("Player mode selected")
+                    logging.info("Player mode selected")
                     running = False
                     return "Player"

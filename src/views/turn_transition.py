@@ -1,5 +1,6 @@
 
 import pygame
+import logging
 
 import settings
 from models import Player, PlayerTurn
@@ -54,5 +55,5 @@ def showTurnTransitionScreen(pturn: PlayerTurn):
                 mouse_pos = event.pos
                 # Check if clicked on AI button
                 if confirm_button.collidepoint(mouse_pos):
-                    print("Clicked")
+                    logging.info("Clicked")
                     return

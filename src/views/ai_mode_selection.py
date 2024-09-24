@@ -1,5 +1,8 @@
+import logging
 import pygame
 import settings
+import sys
+
 from utils import createText, drawBackground, getScreen, getFontSizePx, getPygameColor
 
 
@@ -60,17 +63,17 @@ def showAIModeSelection():
 
                 # Check if clicked on AI button
                 if easy_button_rect.collidepoint(mouse_pos):
-                    print("easy mode selected")  # Placeholder until AI functionality is complete
+                    logging.info("easy mode selected")  # Placeholder until AI functionality is complete
                     running = False
                     return "Easy"
 
                 # Check if clicked on Play Against Player button
                 if medium_button_rect.collidepoint(mouse_pos):
-                    print("medium mode selected")
+                    logging.info("medium mode selected")
                     running = False
                     return "Medium"
 
                 if hard_button_rect.collidepoint(mouse_pos):
-                    print("hard mode selected")  # Placeholder until AI functionality is complete
+                    logging.info("hard mode selected")  # Placeholder until AI functionality is complete
                     running = False
                     return "Hard"

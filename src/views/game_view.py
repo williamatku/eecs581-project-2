@@ -84,7 +84,6 @@ def showGameView(count, player):  # (A) startboard will have the user (current p
                 pygame.draw.rect(screen, lineColor, pyRect,
                                  1)  # (A) this draws the grid, the extra parameter at the end determines if it's 'hollow' and has a border strength
 
-        # print(hoverX, hoverY)
         pygame.display.flip()  # (A) then update the display so all the little color changes happen simutaneously
 
         for event in pygame.event.get():  # (A) listen for events in the game

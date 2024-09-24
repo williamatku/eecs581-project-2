@@ -8,6 +8,7 @@ Other Sources: ChatGPT
 Author(s): Anil Thapa, Michelle Chen, Nathan Bui
 Creation Date: 09/13/2024
 """
+import logging
 
 import pygame
 import settings
@@ -25,7 +26,6 @@ def pvp(ship_count):
 
     playerOne = Player(1)  # (A) initialize playerOne, with a Player(num)-- num marker of 1 to differentiate
     playerTwo = Player(2)  # (A) playertwo with player.num = 2
-    # print(playerOne.board)
 
     currentPlayer = playerOne  # (A) game will start with playerOne, so currentPlayer is initialized
     enemy = playerTwo  # (A) enemy for now is playerTwo, but these roles will be swapped every game loop
@@ -69,7 +69,7 @@ def pvc_hard(count):
     screen = getScreen()
     clock = pygame.time.Clock() # (A) clock that keeps track of how many times the screen is updated
 
-    print("You chose hard mode!")
+    logging.info("You chose hard mode!")
     playerOne = Player(1)  # (A) initialize playerOne, with a Player(num)-- num marker of 1 to differentiate
     drawBackground()
 
@@ -78,7 +78,7 @@ def pvc_hard(count):
 
     # AI gets matrix that says where all ships are
     cheating_board = playerOne.board
-    print(cheating_board)
+    logging.info(cheating_board)
 
     game = True  # (A) game conditional loop
     setUp = True  # (A) check that'll only run the startBoard() once for ships
@@ -124,12 +124,13 @@ def start_game(): # (A) main function that starts the game
 
     elif mode == "AI":  # AI functionality placeholder
 
-        print("AI mode is not implemented yet.")
         difficulty = showAIModeSelection()
 
         if difficulty == "Easy":
+            logging.error("AI mode is not implemented yet.")
             pass
         elif difficulty == "Medium":
+            logging.error("AI mode is not implemented yet.")
             pass
         elif difficulty == "Hard":
             pvc_hard(count)
