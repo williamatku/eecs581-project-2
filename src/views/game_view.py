@@ -3,11 +3,12 @@ import pygame
 
 import settings
 from models import Player, PlayerTurn
-from utils import drawLabels, createText, drawBackground
+from utils import drawLabels, createText, drawBackground, get_screen
 
 
-def showGameView(screen, count,
-                 player):  # (A) startboard will have the user (current player) set up their board based on the count given
+def showGameView(count, player):  # (A) startboard will have the user (current player) set up their board based on the count given
+
+    screen = get_screen()
     lineColor = (255, 255, 255)  # (A) color for the grid/matrix lines; should be (255, 255, 255) or white
     yOffset = 150  # (A) offset to place the board in the middle of the game screen
     xOffset = 150  # (A) same offset but x-direction
@@ -32,7 +33,7 @@ def showGameView(screen, count,
 
     waiting = True  # (A) function loop conditional so it doesn't instantly move away from this screen
     while waiting:  # (A) will wait for inputs
-        drawBackground(screen)
+        drawBackground()
         screen.blit(title, (
             settings.GAMEWIDTH // 2 - title.get_width() // 2,
             yOffset - 75

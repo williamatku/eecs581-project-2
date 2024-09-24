@@ -3,11 +3,12 @@ import pygame
 
 import settings
 from models import Player, PlayerTurn
-from utils import drawLabels, createText, drawBackground
+from utils import drawLabels, createText, drawBackground, get_screen
 
 
-def showTurnTransitionScreen(screen, pturn: PlayerTurn):
+def showTurnTransitionScreen(pturn: PlayerTurn):
 
+    screen = get_screen()
     # Text for the buttons
     question_text = createText('med', f"Player {pturn}, are you ready?", (255, 255, 255))  # White text for better contrast
     confirm_button_text = createText('med', "Lets Battle", (255, 255, 255))
@@ -20,7 +21,7 @@ def showTurnTransitionScreen(screen, pturn: PlayerTurn):
 
     running = True
     while running:
-        drawBackground(screen)
+        drawBackground()
 
         # Add shadow effect for the buttons
         shadow_offset = 5

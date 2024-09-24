@@ -13,13 +13,14 @@ import pygame
 import settings
 import sys
 
-from utils import handlePlayerTurn, drawBackground
+from utils import handlePlayerTurn, drawBackground, get_screen
 from views import showStartMenu, showGameView, showAIModeSelection, showTurnTransitionScreen, showOpponentSelection
 from models import Player
 
 
-def pvp(screen, ship_count):
+def pvp(ship_count):
 
+    screen = get_screen()
     clock = pygame.time.Clock() # (A) clock that keeps track of how many times the screen is updated
 
     playerOne = Player(1)  # (A) initialize playerOne, with a Player(num)-- num marker of 1 to differentiate
@@ -33,12 +34,12 @@ def pvp(screen, ship_count):
     setUp = True  # (A) check that'll only run the startBoard() once for ships
 
     while game:  # (A) while the game is running
-        drawBackground(screen)
+        drawBackground()
         if setUp:  # (A) conditional met with first time run of the loop
-            showGameView(screen, ship_count, playerOne)  # (A) create the matrix for playerOne with ship selection
-            showTurnTransitionScreen(screen, '2')
-            showGameView(screen, ship_count, playerTwo)  # (A) do the same for playerTwo
-            showTurnTransitionScreen(screen, '1')
+            showGameView(ship_count, playerOne)  # (A) create the matrix for playerOne with ship selection
+            showTurnTransitionScreen('2')
+            showGameView(ship_count, playerTwo)  # (A) do the same for playerTwo
+            showTurnTransitionScreen('1')
             setUp = False  # (A) set condition to false, won't run again for remainder of the game
         else:  # (A) when the boards have been set up
             font = pygame.font.Font(None, 28)  # (A) font object with no font type and 28 font size
@@ -49,9 +50,9 @@ def pvp(screen, ship_count):
             ))  # (A) push the rendered text to the top of the screen, placed horizontal and in the middle vertically
 
             # (A) handle the player turn, will swap players (curr/enemy) after each successful playerturn
-            game, currentPlayer, enemy = handlePlayerTurn(screen, currentPlayer, enemy)
+            game, currentPlayer, enemy = handlePlayerTurn(currentPlayer, enemy)
             if game:  # (A) if the game is still going on... may be a redundant conditional in hindsight
-                showTurnTransitionScreen(screen, currentPlayer.num)
+                showTurnTransitionScreen(currentPlayer.num)
                 currentPlayer, enemy = enemy, currentPlayer  # (A) then swap the two players
 
         pygame.display.flip()  # (A) flip to update the display as needed
@@ -61,20 +62,24 @@ def pvp(screen, ship_count):
         clock.tick(settings.FPS)  # (A) FPS (initialized at the start of the code) will determine refresh rate for the game
 
 
-def pvc_hard(screen, count):
+def pvc_hard(count):
 
+    screen = get_screen()
     clock = pygame.time.Clock() # (A) clock that keeps track of how many times the screen is updated
 
     print("You chose hard mode!")
     playerOne = Player(1)  # (A) initialize playerOne, with a Player(num)-- num marker of 1 to differentiate
-    drawBackground(screen)
+    drawBackground()
 
     # player picks their ships using startBoard
-    showGameView(screen, count, playerOne)  # (A) create the matrix for playerOne (only player)
+    showGameView(count, playerOne)  # (A) create the matrix for playerOne (only player)
 
     # AI gets matrix that says where all ships are
     cheating_board = playerOne.board
     print(cheating_board)
+
+    game = True  # (A) game conditional loop
+    setUp = True  # (A) check that'll only run the startBoard() once for ships
 
     while game:
         drawBackground(screen)
@@ -99,25 +104,26 @@ def start_game(): # (A) main function that starts the game
     pygame.init() # (A) initialize the pygame engine so it can listen for inputs/handle screens
     pygame.display.set_caption("battleship") # (A) set up the title of the game
 
-    screen = pygame.display.set_mode((settings.GAMEWIDTH, settings.GAMEHEIGHT)) # (A) the main screen that gets passed around, initialized with a display of GAMEWIDTH and GAMEHEIGHT
+    # initialize the main screen with a display of GAMEWIDTH and GAMEHEIGHT
+    pygame.display.set_mode((settings.GAMEWIDTH, settings.GAMEHEIGHT))
 
-    count = showStartMenu(screen)  # (A) initial getCount() will be the default starting screen to find how many ships to play with
+    count = showStartMenu()  # (A) initial getCount() will be the default starting screen to find how many ships to play with
 
     # Call the mode selection screen
-    mode = showOpponentSelection(screen)
+    mode = showOpponentSelection()
 
 
     if mode == "Player":  # If the user selected to play against another player
-        pvp(screen, count)
+        pvp(count)
 
     elif mode == "AI":  # AI functionality placeholder
 
         print("AI mode is not implemented yet.")
-        difficulty = showAIModeSelection(screen)
+        difficulty = showAIModeSelection()
 
         if difficulty == "Easy":
             pass
         elif difficulty == "Medium":
             pass
         elif difficulty == "Hard":
-            pvc_hard(screen, count)
+            pvc_hard(count)

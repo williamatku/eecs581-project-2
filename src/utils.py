@@ -24,8 +24,16 @@ def createText(font_size, text, color):
                 )
 
 
-def drawBackground(screen):
-    screen.fill(settings.BACKGROUND_COLOR)
+def get_screen():
+    """ safely returns screen obj from pygame interface """
+    screen = pygame.display.get_surface()
+    if screen is None:
+        raise NotImplementedError("Screen has not been initialized, cannot retrieve...")
+    return screen
+
+
+def drawBackground():
+    get_screen().fill(settings.BACKGROUND_COLOR)
 
 
 def drawLabels(screen, xOffset, yOffset):
@@ -54,7 +62,10 @@ def drawLabels(screen, xOffset, yOffset):
         ))  # (M) push again to the to pof the screen with blit and space it out with i * BLOCKHEIGHT
 
 
-def drawBoard(screen, player, enemy):  # (M) function that draws the board in the main game loop
+def drawBoard(player, enemy):  # (M) function that draws the board in the main game loop
+
+    screen = get_screen()
+
     lineColor = (255, 255, 255)  # (M) color of the lines
     topOffset = 30  # (M) offset we add so the column labels don't go off the screen for the top board
     bottomOffset = 400  # (M) bottom offset to push the bottom board down
@@ -115,14 +126,17 @@ def drawBoard(screen, player, enemy):  # (M) function that draws the board in th
                     pygame.draw.rect(screen, (128, 128, 128), pyRect)
 
 
-def handleHit(screen):
+def handleHit():
+
+    screen = get_screen()
+
     hit_text = createText(
         'med',
         'HIT! Please turn the screen to the next player',
         (255, 0, 0)
     )  # (N) essentially this is just a text fill on the screen that will indicate that it is a hit if the check_hit function returns True
 
-    drawBackground(screen)
+    drawBackground()
     playSound('explosion')
     screen.blit(
         hit_text,
@@ -134,7 +148,10 @@ def handleHit(screen):
     pygame.display.flip()  # (N) update display
 
 
-def handleMiss(screen):
+def handleMiss():
+
+    screen = get_screen()
+
     # (N) or if it was the miss do the exact same thing as for a hit but instead of "Hit" being displayed, put "Miss" instead
     miss_text = createText(
         'med',
@@ -151,7 +168,10 @@ def handleMiss(screen):
     pygame.display.flip()
 
 
-def handleWin(screen, currentPlayer, enemy):
+def handleWin(currentPlayer, enemy):
+
+    screen = get_screen()
+
     # (N) display the current player # and that they have won the game
     winner_text = createText(
         'lg',
@@ -159,7 +179,7 @@ def handleWin(screen, currentPlayer, enemy):
         (255, 0, 0)
     )
 
-    drawBackground(screen)
+    drawBackground()
     screen.blit(
         winner_text,
         (
@@ -172,17 +192,20 @@ def handleWin(screen, currentPlayer, enemy):
     return False, currentPlayer, enemy  # (N) then return False to end the game
 
 
-def handlePlayerTurn(screen, currentPlayer, enemy):
+def handlePlayerTurn(currentPlayer, enemy):
     """  # (N) function that handles the current player's turn.
         When a click event happens on the guess board, check for a hit or miss and update board accordingly.
         Some code taken from ChatGPT but mostly changed to fix errors
     """
+
+    screen = get_screen()
+
     waiting_for_input = True  # (A) wait for input so the screen doesn't instantly move
     x_offset = 150  # (N) setting virtical and horizontal offset to specify the guess board on top
     y_offset = 30
     while waiting_for_input:  # (A) input waiting loop
         # (A) draw the board based on player/enemy data (top is guesses, bottom is player)
-        drawBoard(screen, currentPlayer, enemy)
+        drawBoard(currentPlayer, enemy)
         pygame.display.flip()  # (A) update the screen with the rendered boards, and then wait for player to make a decision
 
         for event in pygame.event.get():  # (N) checking for events
@@ -201,17 +224,17 @@ def handlePlayerTurn(screen, currentPlayer, enemy):
                         if currentPlayer.guesses[gridY][gridX] == 0:  # (N) if the square hasn't been shot before
                             # (N) check if it was a hit or miss using the check_hit function
                             if currentPlayer.check_hit(enemy, gridX, gridY):
-                               handleHit(screen)
+                               handleHit()
                             else:
-                               handleMiss(screen)
+                               handleMiss()
                             pygame.time.wait(settings.TURN_TIME_OUT_SECONDS * 1000)
 
                             # (N) redraw the board to show a hit or miss on the screen
-                            drawBoard(screen, currentPlayer, enemy)
+                            drawBoard(currentPlayer, enemy)
 
                             # (N) check for a win by calling the function on the enemy, if that is the case and the current player has won
                             if check_for_win(enemy):
-                                return handleWin(screen, currentPlayer, enemy)
+                                return handleWin(currentPlayer, enemy)
 
                             # (N) if the game isn't over just set waiting_for_input to be false so that the while loop ends
                             waiting_for_input = False

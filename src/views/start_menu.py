@@ -7,7 +7,9 @@ from models import Player, PlayerTurn
 from utils import drawLabels, createText, drawBackground
 
 
-def showStartMenu(screen):  # (M) initial screen that determines how many ships the players will deal with
+def showStartMenu():  # (M) initial screen that determines how many ships the players will deal with
+
+    screen = pygame.display.get_surface()
 
     title = createText('lg', "Battleship", (5, 5, 5))  # (M) titleFont refers to the font initialized earlier
     # (M) font.render(phrase, antialiasing, color, background) is self explanatory (background is not mandatory)
@@ -20,7 +22,7 @@ def showStartMenu(screen):  # (M) initial screen that determines how many ships 
     running = True  # (M) conditional for the game loop to continue
 
     while running:  # (M) this loop is necessary so the player can input their decisions without it going straight to the next screen
-        drawBackground(screen)
+        drawBackground()
 
         screen.blit(title, (settings.GAMEWIDTH // 2 - title.get_width() // 2,
                             100))  # (M) place a rendered object on top of the screen, in this case our texts

@@ -1,9 +1,12 @@
 import pygame
 import settings
-from utils import createText, drawBackground
+from utils import createText, drawBackground, get_screen
 
 
-def showAIModeSelection(screen):
+def showAIModeSelection():
+
+    screen = get_screen()
+
     # Text for the buttons
     easy_text = createText('med', "AI Easy Mode", (255, 255, 255))  # White text for better contrast
     medium_text = createText('med', "AI Medium Mode", (255, 255, 255))
@@ -18,7 +21,7 @@ def showAIModeSelection(screen):
 
     running = True
     while running:
-        drawBackground(screen)
+        drawBackground()
 
         # Add shadow effect for the buttons
         shadow_offset = 5

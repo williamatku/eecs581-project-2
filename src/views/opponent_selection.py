@@ -6,7 +6,9 @@ from models import Player, PlayerTurn
 from utils import drawLabels, createText, drawBackground
 
 
-def showOpponentSelection(screen):
+def showOpponentSelection():
+
+    screen = pygame.display.get_surface()
     # Text for the buttons
     ai_text = createText('med', "PVC", (255, 255, 255))  # White text for better contrast
     player_text = createText('med', "PVP", (255, 255, 255))
@@ -19,7 +21,7 @@ def showOpponentSelection(screen):
 
     running = True
     while running:
-        drawBackground(screen)
+        drawBackground()
 
         # Add shadow effect for the buttons
         shadow_offset = 5
