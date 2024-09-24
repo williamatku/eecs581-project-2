@@ -58,8 +58,8 @@ def main(): # (A) main function that starts the game
 
                 game, currentPlayer, enemy = handlePlayerTurn(screen, currentPlayer, enemy) # (A) handle the player turn, will swap players (curr/enemy) after each successful playerturn
                 if game: # (A) if the game is still going on... may be a redundant conditional in hindsight
+                    showTurnTransitionScreen(screen, currentPlayer.num)
                     currentPlayer, enemy = enemy, currentPlayer # (A) then swap the two players
-                showTurnTransitionScreen(screen, currentPlayer.num)
 
             pygame.display.flip() # (A) flip to update the display as needed
             for event in pygame.event.get(): # (A) listen to events
