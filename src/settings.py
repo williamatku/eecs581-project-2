@@ -1,5 +1,4 @@
 from pathlib import Path
-from pygame.mixer import Sound
 
 BASE_PATH = Path(__file__).resolve().parent.parent
 STATIC_PATH = BASE_PATH.joinpath('static')
