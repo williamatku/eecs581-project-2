@@ -1,4 +1,4 @@
-# Battleship Game (EECS 581 Project 1)
+# Battleship Game EECS 581
 
 A Python implementation of the classic battleship game using the pygame library. The game supports 1-2 players, allowing you to place ships on a grid and take turns guessing the positions of the opponent's ships.
 
@@ -11,14 +11,14 @@ A Python implementation of the classic battleship game using the pygame library.
 
 ## Screenshots
 
-<img src="images/game_start.png" alt="Game Start" width="400">
-<img src="images/player_1.png" alt="Player 1 Ship Placement" width="400">
-<img src="images/player_2.png" alt="Player 2 Ship Placement" width="400">
-<img src="images/gameplay.png" alt="Gameplay" width="400">
-<img src="images/hit.png" alt="Hit Screen" width="400">
-<img src="images/miss.png" alt="Miss Screen" width="400">
-<img src="images/in_game.png" alt="Action Gameplay" width="400">
-<img src="images/player_2_wins.png" alt="Winner Screen" width="400">
+<img src="static/images/game_start.png" alt="Game Start" width="400">
+<img src="static/images/player_1.png" alt="Player 1 Ship Placement" width="400">
+<img src="static/images/player_2.png" alt="Player 2 Ship Placement" width="400">
+<img src="static/images/gameplay.png" alt="Gameplay" width="400">
+<img src="static/images/hit.png" alt="Hit Screen" width="400">
+<img src="static/images/miss.png" alt="Miss Screen" width="400">
+<img src="static/images/in_game.png" alt="Action Gameplay" width="400">
+<img src="static/images/player_2_wins.png" alt="Winner Screen" width="400">
 
 ## How to Play
 
@@ -27,24 +27,39 @@ A Python implementation of the classic battleship game using the pygame library.
 3. **Take Turns:** Players take turns guessing the positions of the opponent's ships by clicking on the grid.
 
 ## Installation
+- Install python 3.12 https://www.python.org/downloads/
+- Open project root directory in terminal
+- Initialize project environment
 
-1. Clone the repository:
+      python3.12 -m venv .
+- Activate Project environment
+    - Mac/Linux
 
-   ```python
-   git clone https://github.com/lakerpack/eecs581Proj1.git
-   ```
+          source bin/activate
+        - NOTE: to deactivate project environment
 
-2. Install the required dependencies:
+              deactivate
+        - NOTE: to reset project environment (macos, linux,)
 
-   ```python
-   pip install -r requirements.txt
-   ```
+              rm -rf bin include lib pyvenv.cfg
+    - Windows Powershell
 
-3. Run the game:
+          .\Scripts\activate
+        - NOTE: to deactivate project environment
 
-   ```python
-   python game.py
-   ```
+              .\Scripts\deactivate.bat
+        - NOTE: to reset project environment (macos, linux,)
+
+              rm -r include
+              rm -r lib 
+              rm -r scripts
+              rm -r pyvenv.cfg
+- Install project in development mode and dependencies with PIP 
+
+      pip install -e .
+- Run on local machine
+      
+      python main.py
 
 ## Controls
 
@@ -62,4 +77,4 @@ A Python implementation of the classic battleship game using the pygame library.
 
 - **Coders:** Anil, Michelle, Nathan
 - **Tester:** Justin
--  **Documentation:** Jaret
+- **Documentation:** Jaret
