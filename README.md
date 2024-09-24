@@ -59,7 +59,7 @@ A Python implementation of the classic battleship game using the pygame library.
       pip install -e .
 - Run on local machine
       
-      python ./src/main.py
+      python main.py
 
 ## Controls
 

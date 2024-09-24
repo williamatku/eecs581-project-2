@@ -105,4 +105,3 @@ def start_game(): # (A) main function that starts the game
                 if event.type == pygame.QUIT: # (A) if user exits out
                     game = False # (A) game is over
             clock.tick(settings.FPS) # (A) FPS (initialized at the start of the code) will determine refresh rate for the game
-
