@@ -1,6 +1,6 @@
 import pygame
 import settings
-from utils import createText
+from utils import createText, drawBackground
 
 
 def showAIModeSelection(screen):
@@ -18,7 +18,7 @@ def showAIModeSelection(screen):
 
     running = True
     while running:
-        screen.fill("skyblue")  # Clear screen with sky blue background
+        drawBackground(screen)
 
         # Add shadow effect for the buttons
         shadow_offset = 5

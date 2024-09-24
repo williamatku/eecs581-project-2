@@ -13,7 +13,7 @@ import pygame
 import settings
 import sys
 
-from utils import handlePlayerTurn
+from utils import handlePlayerTurn, drawBackground
 from views import showStartMenu, showGameView, showAIModeSelection, showTurnTransitionScreen, showOpponentSelection
 from models import Player
 
@@ -43,7 +43,7 @@ def start_game(): # (A) main function that starts the game
         enemy = playerTwo # (A) enemy for now is playerTwo, but these roles will be swapped every game loop
 
         while game: # (A) while the game is running
-            screen.fill("skyblue") # (A) fill the background with skyblue
+            drawBackground(screen)
             if setUp: # (A) conditional met with first time run of the loop
                 showGameView(screen, count, playerOne) # (A) create the matrix for playerOne with ship selection
                 showTurnTransitionScreen(screen, '2')
@@ -79,7 +79,7 @@ def start_game(): # (A) main function that starts the game
         elif difficulty == "Hard":
             print("You chose hard mode!")
             playerOne = Player(1) # (A) initialize playerOne, with a Player(num)-- num marker of 1 to differentiate
-            screen.fill("skyblue") # (A) fill the background with skyblue
+            drawBackground(screen)
 
             # player picks their ships using startBoard
             showGameView(screen, count, playerOne) # (A) create the matrix for playerOne (only player)
@@ -89,7 +89,7 @@ def start_game(): # (A) main function that starts the game
             print(cheating_board)
 
             while game:
-                screen.fill("skyblue") # (A) fill the background with skyblue
+                drawBackground(screen)
                 font = pygame.font.Font(None, 28) # (A) font object with no font type and 28 font size
                 turn_text = font.render(f"Player {playerOne.num}'s Turn", True, (5, 5, 5)) # (A) render the text
                 screen.blit(turn_text, (settings.GAMEWIDTH // 2 - turn_text.get_width() // 2, 350)) # (A) push the rendered text to the top of the screen, placed horizontal and in the middle vertically

@@ -3,7 +3,7 @@ import pygame
 
 import settings
 from models import Player, PlayerTurn
-from utils import drawLabels, createText
+from utils import drawLabels, createText, drawBackground
 
 
 def showGameView(screen, count,
@@ -32,7 +32,7 @@ def showGameView(screen, count,
 
     waiting = True  # (A) function loop conditional so it doesn't instantly move away from this screen
     while waiting:  # (A) will wait for inputs
-        screen.fill("skyblue")  # (A) background will be skyblue
+        drawBackground(screen)
         screen.blit(title, (
             settings.GAMEWIDTH // 2 - title.get_width() // 2,
             yOffset - 75

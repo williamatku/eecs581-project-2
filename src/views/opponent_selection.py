@@ -3,7 +3,7 @@ import pygame
 
 import settings
 from models import Player, PlayerTurn
-from utils import drawLabels, createText
+from utils import drawLabels, createText, drawBackground
 
 
 def showOpponentSelection(screen):
@@ -19,7 +19,7 @@ def showOpponentSelection(screen):
 
     running = True
     while running:
-        screen.fill("skyblue")  # Clear screen with sky blue background
+        drawBackground(screen)
 
         # Add shadow effect for the buttons
         shadow_offset = 5
