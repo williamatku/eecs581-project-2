@@ -77,9 +77,9 @@ def showGameView(count, player):  # (A) startboard will have the user (current p
                 elif player.board[y][x] != 0:  # (A) if the block isn't even empty, e.g. it has a ship
                     ship_size = player.board[y][
                         x]  # (A) find the type of ship/ship size by checking the player's board
-                    ship_color = settings.SHIPCOLORS.get(ship_size,
-                                                (0, 255, 0))  # (A) get the color corresponding to the type of ship
-                    pygame.draw.rect(screen, ship_color, pyRect)  # (A) draw the block with the ship's color
+                    ship_image = settings.SHIPIMAGE.get(ship_size)  # (A) get the color corresponding to the type of ship
+                    ship_image = pygame.transform.scale(ship_image, (settings.BLOCKHEIGHT, settings.BLOCKWIDTH)) #Transforms image to fit size of block
+                    pygame.Surface.blit(screen, ship_image, pyRect) #Displays to board.s
 
                 pygame.draw.rect(screen, lineColor, pyRect,
                                  1)  # (A) this draws the grid, the extra parameter at the end determines if it's 'hollow' and has a border strength

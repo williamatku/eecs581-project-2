@@ -190,7 +190,7 @@ def drawBoard(player, enemy):  # (M) function that draws the board in the main g
             # (M) since this is the player's board, we check the matrix to see if there are any ships at the spot
             if player.board[y][x] != 0:
                 ship_size = player.board[y][x]  # (M) get the type of ship from the player's board
-                ship_image = settings.SHIPCOLORS.get(ship_size)  # (M) get the type of color from matching it to the global colors
+                ship_image = settings.SHIPIMAGE.get(ship_size)  # (M) get the type of color from matching it to the global colors
                 ship_image = pygame.transform.scale(ship_image, (settings.BLOCKHEIGHT, settings.BLOCKWIDTH)) #transforms the ship image to fit inside the square
                 pygame.Surface.blit(screen, ship_image, pyRect) #Displays ship image to screen where player choses.
                 # pygame.draw.rect(screen, ship_color, pyRect)  # (M) draw the colored square onto the board

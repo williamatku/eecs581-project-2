@@ -26,7 +26,7 @@ SHIP3 = pygame.image.load('images/shipImages/shipSize3.png')
 SHIP4 = pygame.image.load('images/shipImages/shipSize4.png')
 SHIP5 = pygame.image.load('images/shipImages/shipSize5.png')
 
-SHIPCOLORS = {1: SHIP1, 2: SHIP2, 3: SHIP3, 4: SHIP4, 5: SHIP5} # (A) global colors for different type of ships
+SHIPIMAGE = {1: SHIP1, 2: SHIP2, 3: SHIP3, 4: SHIP4, 5: SHIP5} # (A) global colors for different type of ships
 
 SOUNDS = {
     'explosion': STATIC_PATH.joinpath('sounds/explosion.mp3'),
