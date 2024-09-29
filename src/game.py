@@ -92,12 +92,12 @@ def drawBoardAIHard(player):  # Function that draws the player's board and the A
             pygame.draw.rect(screen, lineColor, pyRect, 1)
 
             # Display hits and misses on the player's own board
-            if player.guesses[y][x] != 0:
-                if player.guesses[y][x] == 'hit':  # If it's a hit
+            if player.ai_misses[y][x] != 0:
+                if player.ai_misses[y][x] == 'hit':  # If it's a hit
                     pygame.draw.rect(screen, (255, 0, 0), pyRect)  # Draw red for hits
-                elif player.guesses[y][x] == 'miss':  # If it's a miss
+                elif player.ai_misses[y][x] == 'miss':  # If it's a miss
                     pygame.draw.rect(screen, (0, 0, 255), pyRect)  # Draw blue for misses
-                elif player.guesses[y][x] == 'sunk':  # If the ship is sunk
+                elif player.ai_misses[y][x] == 'sunk':  # If the ship is sunk
                     pygame.draw.rect(screen, (128, 128, 128), pyRect)  # Draw gray for sunk ships
 
     # Draw the AI's guess board at the bottom
@@ -171,10 +171,12 @@ def playerTurnAIHard(player):
                     gridX = (mouseX - x_offset) // settings.BLOCKWIDTH
                     gridY = (mouseY - y_offset) // settings.BLOCKHEIGHT
                     if 0 <= gridX < settings.COLS and 0 <= gridY < settings.ROWS:  # (N) making sure the click is occuring on the guess board or it will not be inputted
+                        player.ai_misses[gridY][gridX] = 'miss'
                         if player.guesses[gridY][gridX] == 0:  # (N) if the square hasn't been shot before
                             handleMissHardAI()
                             pygame.time.wait(settings.TURN_TIME_OUT_SECONDS * 1000)
                         waiting_for_input = False
+                
     return False
 
 def handleWinHardAI(): # Function called when hard AI wins a match
@@ -274,6 +276,7 @@ def pvc_hard(count): # Function to handle gameplay between user and AI hard mode
                         x += 1
                         if num != 0:
                             new_cheating_board[y][x] = 0  # Change this cell to 0, indicating that it has been hit by the AI
+                            playerOne.guesses[y][x] = 'hit'
                             move_made = True  # Set flag to indicate a move has been made
                             users_turn = aiHardTurn(playerOne, y, x)  # Process AI move
                             break  # Exit the inner loop
