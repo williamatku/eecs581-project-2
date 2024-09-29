@@ -57,3 +57,4 @@ def showTurnTransitionScreen(pturn: PlayerTurn):
                 if confirm_button.collidepoint(mouse_pos):
                     logging.info("Clicked")
                     return
+                

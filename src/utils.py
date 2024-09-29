@@ -271,10 +271,6 @@ def handlePlayerTurn(currentPlayer, enemy):
     return True, currentPlayer, enemy  # (N) if the game isn't over, return true to keep the game going and swap the roles to make it the enemy's turn instead
 
 
-def aiHardMode(screen, currentPlayer, enemy):
-    drawBoard(screen, currentPlayer, enemy)
-
-
 def check_for_win(player):
     """
         very quick function to check if the current player has won the game

@@ -79,3 +79,4 @@ class Player:  # stores the data for each player so we can alternate easily with
                 if self.board[y][
                     x] == ship_size:  # (N) if any spaces correspond to the size of the ship that was sunk, mark them as sunk in the player's guesses, not the enemy's
                     currentPlayer.guesses[y][x] = 'sunk'
+
