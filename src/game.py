@@ -204,8 +204,6 @@ def handleWinHardAI():
 
 def ai_hit(player, x, y):
     player.guesses[x][y] == 'hit'
-    print('player guesses:')
-    print(player.guesses)
 
 
 def aiHardTurn(player, x, y):
@@ -246,7 +244,6 @@ def pvc_hard(count):
 
         else:  
             if users_turn: # user is doing a move
-                print('got here!')
                 turn_text = createText(f"Player 1's Turn", {
                     'font-size': getFontSizePx('sm'),
                     'color': getPygameColor('start-menu-text')
@@ -281,10 +278,6 @@ def pvc_hard(count):
                             break  # Exit the inner loop
                     if move_made:  # If a move was made, break out of the outer loop as well
                         break
-
-                if move_made:
-                    print("after the move:")
-                    print(new_cheating_board)
                 
                 if all(cell == 0 for row in new_cheating_board for cell in row):
                     print("player 1 looses!")
