@@ -232,9 +232,25 @@ def handlePlayerTurn(currentPlayer, enemy):
     waiting_for_input = True  # (A) wait for input so the screen doesn't instantly move
     x_offset = 150  # (N) setting virtical and horizontal offset to specify the guess board on top
     y_offset = 30
+
+     # Define the Exit button for the top-right positioning
+    button_width = 100
+    button_height = 40
+    margin = 30
+    exit_button_rect = pygame.Rect((settings.GAMEWIDTH - button_width - margin, margin), (button_width, button_height))
+    exit_font = pygame.font.Font(None, 24)
+    exit_text = exit_font.render("Exit Game", True, (255, 255, 255))
+
     while waiting_for_input:  # (A) input waiting loop
         # (A) draw the board based on player/enemy data (top is guesses, bottom is player)
         drawBoard(currentPlayer, enemy)
+
+ # Draw the exit button at the top right
+        pygame.draw.rect(screen, (0, 0, 0), exit_button_rect, 2)
+        pygame.draw.rect(screen, (255, 0, 0), exit_button_rect)
+        screen.blit(exit_text, (exit_button_rect.centerx - exit_text.get_width() // 2,
+                               exit_button_rect.centery - exit_text.get_height() // 2))
+
         pygame.display.flip()  # (A) update the screen with the rendered boards, and then wait for player to make a decision
 
         for event in pygame.event.get():  # (N) checking for events
@@ -242,7 +258,10 @@ def handlePlayerTurn(currentPlayer, enemy):
                 return False, None, None
             elif event.type == pygame.MOUSEBUTTONDOWN:  # (N) if a click occurs
                 if event.button == 1:
-
+                    mouse_pos = event.pos
+                    if exit_button_rect.collidepoint(mouse_pos):
+                        pygame.quit()
+                        sys.exit()
                     mouseX, mouseY = pygame.mouse.get_pos()  # (N) get the position of the mouse
 
                     # (N) looking for the specific position on the actual board

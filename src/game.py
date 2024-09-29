@@ -33,6 +33,13 @@ def pvp(ship_count):
     game = True  # (A) game conditional loop
     setUp = True  # (A) check that'll only run the startBoard() once for ships
 
+    button_width = 100
+    button_height = 40
+    margin = 30  # Margin from the top and right edges
+    exit_button_rect = pygame.Rect((settings.GAMEWIDTH - button_width - margin, margin), (button_width, button_height))
+    exit_font = pygame.font.Font(None, 24)
+    exit_text = exit_font.render("Exit Game", True, (255, 255, 255))
+
     while game:  # (A) while the game is running
         drawBackground()
         if setUp:  # (A) conditional met with first time run of the loop
@@ -57,10 +64,27 @@ def pvp(ship_count):
                 showTurnTransitionScreen(currentPlayer.num)
                 currentPlayer, enemy = enemy, currentPlayer  # (A) then swap the two players
 
+            # Draw the exit button on the gameplay screen
+            pygame.draw.rect(screen, (0, 0, 0), exit_button_rect, 2)  # Draw a black border for visibility
+            pygame.draw.rect(screen, (255, 0, 0), exit_button_rect)  # Draw the red button
+            screen.blit(exit_text, (exit_button_rect.centerx - exit_text.get_width() // 2, 
+                                    exit_button_rect.centery - exit_text.get_height() // 2))
+
         pygame.display.flip()  # (A) flip to update the display as needed
+
+
         for event in pygame.event.get():  # (A) listen to events
             if event.type == pygame.QUIT:  # (A) if user exits out
                 game = False  # (A) game is over
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == 1:  # Left mouse button click
+                        mouse_pos = event.pos
+                        print(f"Mouse click at: {mouse_pos}")
+                        if exit_button_rect.collidepoint(mouse_pos):
+                            print("Exit button clicked")
+                            pygame.quit()
+                            sys.exit()
+
         clock.tick(settings.FPS)  # (A) FPS (initialized at the start of the code) will determine refresh rate for the game
 
 
@@ -113,24 +137,35 @@ def start_game(): # (A) main function that starts the game
     # initialize the main screen with a display of GAMEWIDTH and GAMEHEIGHT
     pygame.display.set_mode((settings.GAMEWIDTH, settings.GAMEHEIGHT))
 
-    count = showStartMenu()  # (A) initial getCount() will be the default starting screen to find how many ships to play with
+    #count = showStartMenu()  # (A) initial getCount() will be the default starting screen to find how many ships to play with
 
     # Call the mode selection screen
-    mode = showOpponentSelection()
+    #mode = showOpponentSelection()
 
+    while True:
+        count = showStartMenu()# (A) initial getCount() will be the default starting screen to find how many ships to play with
+        mode = showOpponentSelection()# Call the mode selection screen
 
-    if mode == "Player":  # If the user selected to play against another player
-        pvp(count)
+        if mode == "Player":  # If the user selected to play against another player
+        
+            pvp(count)
 
-    elif mode == "AI":  # AI functionality placeholder
+        elif mode == "AI":  # AI functionality placeholder
 
-        difficulty = showAIModeSelection()
+            difficulty = showAIModeSelection()
 
-        if difficulty == "Easy":
-            logging.error("AI mode is not implemented yet.")
-            pass
-        elif difficulty == "Medium":
-            logging.error("AI mode is not implemented yet.")
-            pass
-        elif difficulty == "Hard":
-            pvc_hard(count)
+            if difficulty == "Easy":
+                logging.error("AI mode is not implemented yet.")
+                pass
+            elif difficulty == "Medium":
+                logging.error("AI mode is not implemented yet.")
+                pass
+            elif difficulty == "Hard":
+                pvc_hard(count)
+            elif difficulty == "Go Back":
+                continue
+                
+        
+        elif mode == "Go Back":
+            start_game()
+            
