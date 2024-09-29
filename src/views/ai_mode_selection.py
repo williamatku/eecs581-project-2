@@ -13,23 +13,23 @@ def showAIModeSelection():
     # Text for the buttons
     easy_text = createText("AI Easy Mode", {
         'font-size': getFontSizePx('med'),
-        'color': getPygameColor('white')
+        'color': getPygameColor('start-menu-text')
     })  # White text for better contrast
     medium_text = createText("AI Medium Mode",{
         'font-size': getFontSizePx('med'),
-        'color': getPygameColor('white')
+        'color': getPygameColor('start-menu-text-2')
     })
     hard_text = createText("AI Hard Mode", {
         'font-size': getFontSizePx('med'),
-        'color': getPygameColor('white')
+        'color': getPygameColor('start-menu-text')
     })
 
     # Button dimensions and positions
-    button_width = 300
-    button_height = 60
-    easy_button_rect = pygame.Rect((settings.GAMEWIDTH // 2 - button_width // 2, 200), (button_width, button_height))
+    button_width = 370
+    button_height = 90
+    easy_button_rect = pygame.Rect((settings.GAMEWIDTH // 2 - button_width // 2, 150), (button_width, button_height))
     medium_button_rect = pygame.Rect((settings.GAMEWIDTH // 2 - button_width // 2, 300), (button_width, button_height))
-    hard_button_rect = pygame.Rect((settings.GAMEWIDTH // 2 - button_width // 2, 400), (button_width, button_height))
+    hard_button_rect = pygame.Rect((settings.GAMEWIDTH // 2 - button_width // 2, 450), (button_width, button_height))
 
     running = True
     while running:
@@ -37,14 +37,14 @@ def showAIModeSelection():
 
         # Add shadow effect for the buttons
         shadow_offset = 5
-        pygame.draw.rect(screen, (0, 100, 0), easy_button_rect.move(shadow_offset, shadow_offset), border_radius=10)
-        pygame.draw.rect(screen, (0, 100, 0), medium_button_rect.move(shadow_offset, shadow_offset), border_radius=10)
-        pygame.draw.rect(screen, (0, 100, 0), hard_button_rect.move(shadow_offset, shadow_offset), border_radius=10)
+        pygame.draw.rect(screen, getPygameColor('start-menu-text'), easy_button_rect.move(shadow_offset, shadow_offset), border_radius=10)
+        pygame.draw.rect(screen, getPygameColor('start-menu-text-2'), medium_button_rect.move(shadow_offset, shadow_offset), border_radius=10)
+        pygame.draw.rect(screen, getPygameColor('start-menu-text'), hard_button_rect.move(shadow_offset, shadow_offset), border_radius=10)
 
         # Draw the buttons with rounded corners
-        pygame.draw.rect(screen, (0, 200, 0), easy_button_rect, border_radius=10)  # Rounded corners with border_radius
-        pygame.draw.rect(screen, (0, 200, 0), medium_button_rect, border_radius=10)
-        pygame.draw.rect(screen, (0, 200, 0), hard_button_rect, border_radius=10)
+        pygame.draw.rect(screen, getPygameColor('start-menu-text-2'), easy_button_rect, border_radius=10)  # Rounded corners with border_radius
+        pygame.draw.rect(screen, getPygameColor('start-menu-text'), medium_button_rect, border_radius=10)
+        pygame.draw.rect(screen, getPygameColor('start-menu-text-2'), hard_button_rect, border_radius=10)
 
         # Draw the text on the buttons
         screen.blit(easy_text, ( easy_button_rect.centerx - easy_text.get_width() // 2, easy_button_rect.centery - easy_text.get_height() // 2))

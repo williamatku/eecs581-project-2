@@ -12,18 +12,18 @@ def showOpponentSelection():
     # Text for the buttons
     ai_text = createText("PVC", {
         'font-size': getFontSizePx('med'),
-        'color': getPygameColor('white')
+        'color': getPygameColor('start-menu-text-2')
     })  # White text for better contrast
     player_text = createText("PVP", {
         'font-size': getFontSizePx('med'),
-        'color': getPygameColor('white')
+        'color': getPygameColor('start-menu-text')
     })
 
     # Button dimensions and positions
-    button_width = 300
-    button_height = 60
-    ai_button_rect = pygame.Rect((settings.GAMEWIDTH // 2 - button_width // 2, 200), (button_width, button_height))
-    player_button_rect = pygame.Rect((settings.GAMEWIDTH // 2 - button_width // 2, 300), (button_width, button_height))
+    button_width = 370
+    button_height = 90
+    ai_button_rect = pygame.Rect((settings.GAMEWIDTH // 2 - button_width // 2, 170), (button_width, button_height))
+    player_button_rect = pygame.Rect((settings.GAMEWIDTH // 2 - button_width // 2, 370), (button_width, button_height))
 
     running = True
     while running:
@@ -31,12 +31,12 @@ def showOpponentSelection():
 
         # Add shadow effect for the buttons
         shadow_offset = 5
-        pygame.draw.rect(screen, (0, 100, 0), ai_button_rect.move(shadow_offset, shadow_offset), border_radius=10)
-        pygame.draw.rect(screen, (0, 100, 0), player_button_rect.move(shadow_offset, shadow_offset), border_radius=10)
+        pygame.draw.rect(screen, getPygameColor('start-menu-text-2'), ai_button_rect.move(shadow_offset, shadow_offset), border_radius=10)
+        pygame.draw.rect(screen, getPygameColor('start-menu-text'), player_button_rect.move(shadow_offset, shadow_offset), border_radius=10)
 
         # Draw the buttons with rounded corners
-        pygame.draw.rect(screen, (0, 200, 0), ai_button_rect, border_radius=10)  # Rounded corners with border_radius
-        pygame.draw.rect(screen, (0, 200, 0), player_button_rect, border_radius=10)
+        pygame.draw.rect(screen, getPygameColor('start-menu-text'), ai_button_rect, border_radius=10)  # Rounded corners with border_radius
+        pygame.draw.rect(screen, getPygameColor('start-menu-text-2'), player_button_rect, border_radius=10)
 
         # Draw the text on the buttons
         screen.blit(ai_text, (

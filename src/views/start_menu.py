@@ -10,22 +10,22 @@ from utils import drawLabels, createText, drawBackground, getPygameColor, getFon
 def showStartMenu():  # (M) initial screen that determines how many ships the players will deal with
 
     screen = pygame.display.get_surface()
-
-    title = createText("Battleship", {
+    
+    title = createText("BATTLESHIP", {
         'font-size': getFontSizePx('lg'),
         'color': getPygameColor('start-menu-text')
     })
     prompt = createText("How many ships would you like? (1-5)", {
         'font-size': getFontSizePx('med'),
-        'color': getPygameColor('start-menu-text')
+        'color': getPygameColor('start-menu-text-2')
     })
     startText = createText("Press ENTER to start", {
         'font-size': getFontSizePx('med'),
-        'color': getPygameColor('start-menu-text')
+        'color': getPygameColor('start-menu-text-2')
     })
     disclaimer = createText("Use the up and down arrows to adjust the # of ships", {
         'font-size': getFontSizePx('sm'),
-        'color': getPygameColor('start-menu-text')
+        'color': getPygameColor('start-menu-text-2')
     })
 
     ship_count = 1  # (M) minimum number of ships we can play with is one
@@ -44,6 +44,14 @@ def showStartMenu():  # (M) initial screen that determines how many ships the pl
                                 400))  # (M) vertical placement is subjective, so we just pick whatever looks appealing
         screen.blit(disclaimer,
                     (settings.GAMEWIDTH // 2 - disclaimer.get_width() // 2, 450))  # (M) placing another text onto the screen
+
+
+        box_width = 100 # box width displayed behind the number of ships chosen on start page
+        box_height = 50 # box height displayed behind the number of ships chosen on start page
+        count_rect = pygame.Rect((settings.GAMEWIDTH // 2 - box_width // 2, 285), (box_width, box_height))
+        shadow_offset = 5
+        pygame.draw.rect(screen, getPygameColor('start-menu-text'), count_rect.move(shadow_offset, shadow_offset), border_radius=10) #draw box
+        pygame.draw.rect(screen, getPygameColor('start-menu-text-2'), count_rect, border_radius=10) # draw box shadow
 
         # (M) new text to render inside the loop because it's dependent on the count of what the user has chosen
         count_text = createText(str(ship_count),{
