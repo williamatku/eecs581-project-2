@@ -275,66 +275,71 @@ def handlePlayerTurn(currentPlayer, enemy):
 
 
 def handleMediumAITurn(ai_opponent: Player, player, ai_guess_state: AIGuessState):
-    """  # (N) function that handles the current player's turn.
-        When a click event happens on the guess board, check for a hit or miss and update board accordingly.
-        Some code taken from ChatGPT but mostly changed to fix errors
-    """
-    # mouseX, mouseY = pygame.mouse.get_pos()  # (N) get the position of the mouse
 
-    if ai_guess_state.on_a_roll:
-        mouseX, mouseY = ai_guess_state.produce_guess()
+    if ai_guess_state.on_a_roll: #If first was a hit 
+        mouseX, mouseY = ai_guess_state.produce_guess() #Get a guess from algorithm 
 
         guess = None
 
         try:
-            guess = ai_opponent.guesses[mouseY][mouseX]
+            guess = ai_opponent.guesses[mouseY][mouseX] #Gets the passed guesses
         except IndexError:
-            pass
+            pass #if the next guess in algorithm is out of bounds Handles the excpetion
 
         logging.info(f'something seomthing {player.count_sunk_ships()}')
 
-        if guess == 0:  # (N) if the square hasn't been shot before
+        if guess == 0: 
+            #Checks to see if the AI hit the other players ships
             hit = ai_opponent.check_hit(player, mouseX, mouseY)
-
+            #if number of sunk ships increaes then reset AI to random guess
             if ai_guess_state.curr_sunk_ships < player.count_sunk_ships():
                 logging.info('detected sunk ship')
                 ai_guess_state.reset()
             elif hit:
+                #If the next hit was a hit then continue with the guessing strategy 
                 ai_guess_state.continue_roll((mouseX, mouseY))
             else:
+                #if the hit was a miss then tally it as a bas gift 
                 ai_guess_state.bad_guess((mouseX, mouseY))
 
 
             logging.info(f'made a guess at {mouseY}, {mouseX}')
-            # (N) check for a win by calling the function on the enemy, if that is the case and the current player has won
+            #Check if the player has won after the guess
             if check_for_win(player):
                 return handleWin(ai_opponent, player)
         else:
+            #Mark a miss as a bad guess
             ai_guess_state.bad_guess((mouseX, mouseY))
+            #Calls function to handle medium ai difficulty 
             return handleMediumAITurn(ai_opponent, player, ai_guess_state)
-
-        return True  # (N) if the game isn't over, return true to keep the game going
+        #returns true once the turn is complete 
+        return True
     else:
-
+        #updates the amount of sunk ships 
         ai_guess_state.curr_sunk_ships = player.count_sunk_ships()
 
+        #Random positon for AI guess
         mouseX = random.randint(0, 9)
         mouseY = random.randint(0, 9)
 
-        if ai_opponent.guesses[mouseY][mouseX] == 0:  # (N) if the square hasn't been shot before
+        #Checks to see if the AI has guessed that position yet 
+        if ai_opponent.guesses[mouseY][mouseX] == 0:
+            #Checks to see if the guess was a hit 
             hit = ai_opponent.check_hit(player, mouseX, mouseY)
 
             if hit:
+                #If it was a hit then start a roll 
                 ai_guess_state.start_roll((mouseX, mouseY))
 
             logging.info(f'made a guess at {mouseY}, {mouseX}')
-            # (N) check for a win by calling the function on the enemy, if that is the case and the current player has won
+            #Checks to see if player won after guess
             if check_for_win(player):
                 return handleWin(ai_opponent, player)
         else:
+            #Handles the AI turn for medium 
             return handleMediumAITurn(ai_opponent, player, ai_guess_state)
 
-        return True # (N) if the game isn't over, return true to keep the game going
+        return True
 
 
 def aiHardMode(screen, currentPlayer, enemy):
@@ -347,14 +352,11 @@ def check_for_win(player):
         by looking at the enemy's ships that have been sunk to see if all of them have been sunk.
         Adapted from ChatGPT
     """
-
-    # (N) this will check to see if all of the player's ships (which in the program is called as the enemy for the function call) are sunk.
-    # (N) This is done by checking if every ship in the enemy's ships placed are present in their dicts of ships that are sunk. If that is the case then return true, otherwise return false because the game is not won yet
+   
     return all(
         player.sunk_ships.get(ship_size, False)
         for ship_size in player.ships
     )
-
 
 def random_placement(count: int, ai_opponent: Player):
 

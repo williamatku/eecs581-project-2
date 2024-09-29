@@ -107,51 +107,43 @@ def pvc_hard(count):
 
 
 
-def pvc_medium(count):
-
-    screen = getScreen()
-    clock = pygame.time.Clock() # (A) clock that keeps track of how many times the screen is updated
+def pvc_medium(count): #Ai medium 
+    clock = pygame.time.Clock()
 
     logging.info("You chose medium mode!")
-    player = Player(1)  # (A) initialize playerOne, with a Player(num)-- num marker of 1 to differentiate
+    player = Player(1)
+    ai_opponent: Player = Player(2) 
+    random_placement(count, ai_opponent) #Places ships in the random spots for AI
+    ai_guess_state = AIGuessState() #Class that stores hits, sunk ships, and misses 
 
-    ai_opponent: Player = Player(2)
-    random_placement(count, ai_opponent)
-    ai_guess_state = AIGuessState()
+    drawBackground() #Draws the blue background
 
-    drawBackground()
-
-    # player picks their ships using startBoard
-    showGameView(count, player)  # (A) create the matrix for playerOne (only player)
+   
+    showGameView(count, player) #Lets you place ships for how many you have clicked 
 
 
-    game = True  # (A) game conditional loop
-    # #setUp = True  # (A) check that'll only run the startBoard() once for ships
-    #
+    game = True 
     while game:
         drawBackground()
 
         logging.info('player turn init')
-        game = handlePlayerTurn(player, ai_opponent)
+        game = handlePlayerTurn(player, ai_opponent) #Puts everything on the board and waits for input from Player 
         logging.info('ai turn init')
-        game = handleMediumAITurn(ai_opponent, player, ai_guess_state)
-        ai_opponent.spit_guesses()
+        game = handleMediumAITurn(ai_opponent, player, ai_guess_state) #Waits for input from AiMedium mode 
+        ai_opponent.spit_guesses() #Shows your guesses 
 
-        clock.tick(settings.FPS)  # (A) FPS (initialized at the start of the code) will determine refresh rate for the game
+        clock.tick(settings.FPS)  
 
 
-def start_game(): # (A) main function that starts the game
-    pygame.init() # (A) initialize the pygame engine so it can listen for inputs/handle screens
-    pygame.display.set_caption("battleship") # (A) set up the title of the game
+def start_game():
+    pygame.init() 
+    pygame.display.set_caption("battleship") 
 
     # initialize the main screen with a display of GAMEWIDTH and GAMEHEIGHT
     pygame.display.set_mode((settings.GAMEWIDTH, settings.GAMEHEIGHT))
 
-    count = showStartMenu()  # (A) initial getCount() will be the default starting screen to find how many ships to play with
-
-    # Call the mode selection screen
+    count = showStartMenu() 
     mode = showOpponentSelection()
-
 
     if mode == "Player":  # If the user selected to play against another player
         pvp(count)
