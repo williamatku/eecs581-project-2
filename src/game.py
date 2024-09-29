@@ -62,11 +62,11 @@ def showTurnTransitionScreenAI(pturn: PlayerTurn):
         pygame.display.flip()  # Update screen
 
         for event in pygame.event.get():
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1: # Event listener when user clicks
 
-                mouse_pos = event.pos
-                if confirm_button.collidepoint(mouse_pos):
-                    return "Confirmed"
+                mouse_pos = event.pos # Get mouse location 
+                if confirm_button.collidepoint(mouse_pos): # Confirm mouse over button
+                    return "Confirmed" # Return confirmed which will tell pvc_hard to start gameplay loop
 
 def drawBoardAIHard(player):  # Function that draws the player's board and the AI's guesses
 
@@ -130,11 +130,11 @@ def drawBoardAIHard(player):  # Function that draws the player's board and the A
                 elif player.guesses[y][x] == 'sunk':
                     pygame.draw.rect(screen, getPygameColor('ship-sunk'), pyRect)  # Sunk - gray
 
-def handleMissHardAI():
+def handleMissHardAI(): # Function used to handle a miss, which is every turn when on AI hard mode
 
     screen = getScreen()
 
-    # (N) or if it was the miss do the exact same thing as for a hit but instead of "Hit" being displayed, put "Miss" instead
+    # almost same functionality as handleMiss(), but text displays that AI is making a move
     miss_text = createText(
         'MISS! Please wait while AI makes their move...',
         {
@@ -177,11 +177,11 @@ def playerTurnAIHard(player):
                         waiting_for_input = False
     return False
 
-def handleWinHardAI():
+def handleWinHardAI(): # Function called when hard AI wins a match
 
     screen = getScreen()
 
-    # (N) display the current player # and that they have won the game
+    # (N) display 'AI Wins!'
     winner_text = createText(
         f"AI Wins!",
         {
@@ -200,51 +200,50 @@ def handleWinHardAI():
     )
     pygame.display.flip()
     pygame.time.wait(3000)  # (N) wait a bit
-    return False
+    return False # False is returned because this function is set to the variable game, so when game == False the application finishes running
 
 def ai_hit(player, x, y):
-    player.guesses[x][y] == 'hit'
+    player.guesses[x][y] == 'hit' # This stores where the user has hit ships and saves it to guesses
 
 
 def aiHardTurn(player, x, y):
     ai_hit(player, x, y)
-    return True
+    return True # Return True because the value of aiHardTurn is saved to users_turn, so user turn will start after this function
     
 
-def pvc_hard(count):
+def pvc_hard(count): # Function to handle gameplay between user and AI hard mode
     screen = getScreen()
     clock = pygame.time.Clock()
 
     logging.info("You chose hard mode!")
     playerOne = Player(1)
-    new_cheating_board = []
+    new_cheating_board = [] # Matrix to track where user put all of their ships (for cheating)
 
     drawBackground()
 
-    game = True
-    setUp = True
-    users_turn = False
+    game = True # Flag to show when game should still be happening or end
+    setUp = True # Flag to show if user still needs to set up their ships on a board
+    users_turn = False # Flag to show if user turn is happening or if AI is generating its move
 
     while game:
         drawBackground()
         
         if setUp:
-            showGameView(count, playerOne)
+            showGameView(count, playerOne) # Function for user to pick where they want to put their ships
             # AI gets matrix that says where all ships are
-            cheating_board = playerOne.board
+            cheating_board = playerOne.board # Temporary variable cheating board to put this information in new_cheating_board
             for list in cheating_board:
                 new_cheating_board.append(list)
             logging.info(cheating_board)
-            print(cheating_board)
-            confirmed = showTurnTransitionScreenAI('1')
-            setUp = False
+            confirmed = showTurnTransitionScreenAI('1') # Variable to check if user has clicked confirm button
+            setUp = False # Setup is complete so this flag is marked as False
 
             if confirmed == "Confirmed":
                 users_turn = True  # Set the flag to true after confirmation
 
         else:  
             if users_turn: # user is doing a move
-                turn_text = createText(f"Player 1's Turn", {
+                turn_text = createText(f"Player 1's Turn", { # Display heading text
                     'font-size': getFontSizePx('sm'),
                     'color': getPygameColor('start-menu-text')
                 })
@@ -265,6 +264,8 @@ def pvc_hard(count):
                 ))
 
                 move_made = False  # Flag to track if a move was made
+
+                # iterate through the new_cheating_board matrix and keep track of indexes:
                 y = -1
                 for list in new_cheating_board:
                     y += 1
@@ -272,7 +273,7 @@ def pvc_hard(count):
                     for num in list:
                         x += 1
                         if num != 0:
-                            new_cheating_board[y][x] = 0  # Clear the cell
+                            new_cheating_board[y][x] = 0  # Change this cell to 0, indicating that it has been hit by the AI
                             move_made = True  # Set flag to indicate a move has been made
                             users_turn = aiHardTurn(playerOne, y, x)  # Process AI move
                             break  # Exit the inner loop
