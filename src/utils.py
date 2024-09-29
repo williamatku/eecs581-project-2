@@ -1,6 +1,12 @@
+import logging
+
 import settings
 import pygame
 import sys
+import random
+
+
+from models import Player, AIGuessState
 
 
 def playSound(sound):
@@ -109,13 +115,12 @@ def drawBoard(player, enemy):  # (M) function that draws the board in the main g
             pygame.draw.rect(screen, lineColor, pyRect, 1)
 
             # (M) if the guess board does not have 0 at the guess matrix, it has one of 3 conditions
-            if player.guesses[y][x] != 0:
-                if player.guesses[y][x] == 'hit':  # (M) the guess was a hit
-                    pygame.draw.rect(screen, (255, 0, 0), pyRect)  # (M) draw red on the spot for a hit
-                elif player.guesses[y][x] == 'miss':  # (M) the guess was a miss
-                    pygame.draw.rect(screen, (0, 0, 255), pyRect)  # (M) draw blue on the spot for a miss
-                elif player.guesses[y][x] == 'sunk':  # (N) if the ship is sunk
-                    pygame.draw.rect(screen, (128, 128, 128), pyRect)  # (N) draw the spot as gray
+            if player.guesses[y][x] == 'hit':  # (M) the guess was a hit
+                pygame.draw.rect(screen, getPygameColor('ship-hit'), pyRect)  # (M) draw red on the spot for a hit
+            elif player.guesses[y][x] == 'miss':  # (M) the guess was a miss
+                pygame.draw.rect(screen, getPygameColor('ship-miss'), pyRect)  # (M) draw blue on the spot for a miss
+            elif player.guesses[y][x] == 'sunk':  # (N) if the ship is sunk
+                pygame.draw.rect(screen, getPygameColor('ship-sunk'), pyRect)  # (N) draw the spot as gray
 
     # (M) now draw the labels but on the bottom board, so we use bottom offset
     drawLabels(screen, xOffset, bottomOffset)
@@ -139,15 +144,13 @@ def drawBoard(player, enemy):  # (M) function that draws the board in the main g
                 0, 255, 0))  # (M) get the type of color from matching it to the global colors
                 pygame.draw.rect(screen, ship_color, pyRect)  # (M) draw the colored square onto the board
 
-            if enemy.guesses[y][x] != 0:  # (N) showing hits and misses on the player's own ships
-
-                # (N) check through the enemy's guessses and mark spots as red, blue, or gray for hits, misses, and ships that are sunk respectively
-                if enemy.guesses[y][x] == 'hit':
-                    pygame.draw.rect(screen, getPygameColor('ship-hit'), pyRect)  # (N) hit means red
-                elif enemy.guesses[y][x] == 'miss':  # (N) miss means blue
-                    pygame.draw.rect(screen, getPygameColor('ship-miss'), pyRect)
-                elif enemy.guesses[y][x] == 'sunk':  # (N) sunk means gray
-                    pygame.draw.rect(screen, getPygameColor('ship-sunk'), pyRect)
+            # (N) check through the enemy's guessses and mark spots as red, blue, or gray for hits, misses, and ships that are sunk respectively
+            if enemy.guesses[y][x] == 'hit':
+                pygame.draw.rect(screen, getPygameColor('ship-hit'), pyRect)  # (N) hit means red
+            elif enemy.guesses[y][x] == 'miss':  # (N) miss means blue
+                pygame.draw.rect(screen, getPygameColor('ship-miss'), pyRect)
+            elif enemy.guesses[y][x] == 'sunk':  # (N) sunk means gray
+                pygame.draw.rect(screen, getPygameColor('ship-sunk'), pyRect)
 
 
 def handleHit():
@@ -268,7 +271,70 @@ def handlePlayerTurn(currentPlayer, enemy):
                             # (N) if the game isn't over just set waiting_for_input to be false so that the while loop ends
                             waiting_for_input = False
 
-    return True, currentPlayer, enemy  # (N) if the game isn't over, return true to keep the game going and swap the roles to make it the enemy's turn instead
+    return True
+
+
+def handleMediumAITurn(ai_opponent: Player, player, ai_guess_state: AIGuessState):
+    """  # (N) function that handles the current player's turn.
+        When a click event happens on the guess board, check for a hit or miss and update board accordingly.
+        Some code taken from ChatGPT but mostly changed to fix errors
+    """
+    # mouseX, mouseY = pygame.mouse.get_pos()  # (N) get the position of the mouse
+
+    if ai_guess_state.on_a_roll:
+        mouseX, mouseY = ai_guess_state.produce_guess()
+
+        guess = None
+
+        try:
+            guess = ai_opponent.guesses[mouseY][mouseX]
+        except IndexError:
+            pass
+
+        logging.info(f'something seomthing {player.count_sunk_ships()}')
+
+        if guess == 0:  # (N) if the square hasn't been shot before
+            hit = ai_opponent.check_hit(player, mouseX, mouseY)
+
+            if ai_guess_state.curr_sunk_ships < player.count_sunk_ships():
+                logging.info('detected sunk ship')
+                ai_guess_state.reset()
+            elif hit:
+                ai_guess_state.continue_roll((mouseX, mouseY))
+            else:
+                ai_guess_state.bad_guess((mouseX, mouseY))
+
+
+            logging.info(f'made a guess at {mouseY}, {mouseX}')
+            # (N) check for a win by calling the function on the enemy, if that is the case and the current player has won
+            if check_for_win(player):
+                return handleWin(ai_opponent, player)
+        else:
+            ai_guess_state.bad_guess((mouseX, mouseY))
+            return handleMediumAITurn(ai_opponent, player, ai_guess_state)
+
+        return True  # (N) if the game isn't over, return true to keep the game going
+    else:
+
+        ai_guess_state.curr_sunk_ships = player.count_sunk_ships()
+
+        mouseX = random.randint(0, 9)
+        mouseY = random.randint(0, 9)
+
+        if ai_opponent.guesses[mouseY][mouseX] == 0:  # (N) if the square hasn't been shot before
+            hit = ai_opponent.check_hit(player, mouseX, mouseY)
+
+            if hit:
+                ai_guess_state.start_roll((mouseX, mouseY))
+
+            logging.info(f'made a guess at {mouseY}, {mouseX}')
+            # (N) check for a win by calling the function on the enemy, if that is the case and the current player has won
+            if check_for_win(player):
+                return handleWin(ai_opponent, player)
+        else:
+            return handleMediumAITurn(ai_opponent, player, ai_guess_state)
+
+        return True # (N) if the game isn't over, return true to keep the game going
 
 
 def aiHardMode(screen, currentPlayer, enemy):
@@ -288,3 +354,30 @@ def check_for_win(player):
         player.sunk_ships.get(ship_size, False)
         for ship_size in player.ships
     )
+
+
+def random_placement(count: int, ai_opponent: Player):
+
+    placing = True
+
+    ships = [val + 1
+             for val in
+             range(count)]  # (A) rubric outlines each ship has a val of their count equivalent so [1,2,3.. etc.]
+
+    currentShip = ships.pop()  # (A) we pop the last ship or highest value to start placements with
+
+    while placing:
+
+        direction = random.randint(0, 3)
+        placeX = random.randint(1, 10)
+        placeY = random.randint(1, 10)
+
+        if 0 <= placeX < settings.COLS and 0 <= placeY < settings.ROWS:  # (A) first check the bounds of the click to make sure it was valid
+            if ai_opponent.place_ship(placeX, placeY, currentShip,
+                                 direction):  # (A) then see if you can place the ship within the player object's matrix
+                if ships:  # (A) if there are more ships to place
+                    currentShip = ships.pop()  # (A) pop the next ship and repeat the loop
+                else:
+                    placing = False  # (A) break the loop otherwise
+
+    print(ai_opponent.spit_board())

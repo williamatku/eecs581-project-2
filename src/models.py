@@ -1,5 +1,7 @@
 import settings
+import logging
 
+from typing import Optional
 
 type PlayerTurn = '1' | '2'
 
@@ -79,3 +81,87 @@ class Player:  # stores the data for each player so we can alternate easily with
                 if self.board[y][
                     x] == ship_size:  # (N) if any spaces correspond to the size of the ship that was sunk, mark them as sunk in the player's guesses, not the enemy's
                     currentPlayer.guesses[y][x] = 'sunk'
+
+    def count_sunk_ships(self):
+
+        logging.info(self.sunk_ships)
+
+        s1 = 1 if self.sunk_ships.get(1) else 0
+        s2 = 1 if self.sunk_ships.get(2) else 0
+        s3 = 1 if self.sunk_ships.get(3) else 0
+        s4 = 1 if self.sunk_ships.get(4) else 0
+        s5 = 1 if self.sunk_ships.get(5) else 0
+
+        return s1 + s2 + s3 + s4 + s5
+
+
+    def spit_board(self):
+        for row in self.board:
+            print(row)
+
+    def spit_guesses(self):
+        for row in self.guesses:
+            print(row)
+        print()
+
+
+class AIGuessState:
+    def __init__(self):
+        self.on_a_roll = False
+        self.first_successful_guess: Optional[(int, int)] = None
+        self.last_successful_guess: Optional[(int, int)] = None
+        self.curr_sunk_ships = None
+        self.guesses = []
+        self.orientation = 0
+        self.failed_guesses = 0
+
+    def start_roll(self, fsg):
+        self.on_a_roll = True
+        self.first_successful_guess = fsg
+        self.last_successful_guess = fsg
+        self.guesses.append(fsg)
+
+    def continue_roll(self, lsg):
+        self.last_successful_guess = lsg
+        self.failed_guesses = 0
+        self.guesses.append(lsg)
+
+    def bad_guess(self, bad_guezz):
+        logging.info(f'bad guess {self.failed_guesses}')
+
+        self.guesses.append(bad_guezz)
+        if self.failed_guesses > 3:
+            self.last_successful_guess = self.first_successful_guess
+            self.failed_guesses = 0
+        else:
+            self.orientation = (self.orientation + 1) % 4
+            self.failed_guesses += 1
+
+    def produce_guess(self):
+
+        last_was_success = self.last_successful_guess != None
+
+        x, y = None, None
+        if last_was_success:
+            x, y = self.last_successful_guess
+        else:
+            x, y = self.first_successful_guess
+
+        match self.orientation:
+            case 0:
+                return x, y + 1
+            case 1:
+                return x + 1, y
+            case 2:
+                return x, abs(y - 1)
+            case 3:
+                return abs(x - 1), y
+
+    def reset(self):
+        self.orientation = 0
+        self.last_successful_guess = None
+        self.first_successful_guess = None
+        self.guesses = []
+        self.failed_guesses = 0
+        self.on_a_roll = False
+        self.curr_sunk_ships = None
