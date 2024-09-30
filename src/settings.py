@@ -13,8 +13,9 @@ TURN_TIME_OUT_SECONDS = 3
 COLORS = {
     'black': (0, 0, 0),
     'white': (255, 255, 255),
-    'background': "skyblue",
-    'start-menu-text': (5, 5, 5),
+    'background': (59, 65, 57),
+    'start-menu-text': (224, 227, 223),
+    'start-menu-text-2': (139, 151, 135),
     'ship-hit': (255, 0, 0),
     'ship-miss': (0, 0, 255),
     'ship-sunk': (0, 0, 0)

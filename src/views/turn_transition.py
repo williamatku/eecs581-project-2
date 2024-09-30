@@ -13,11 +13,11 @@ def showTurnTransitionScreen(pturn: PlayerTurn):
     # Text for the buttons
     question_text = createText(f"Player {pturn}, are you ready?", {
         'font-size': getFontSizePx('med'),
-        'color': getPygameColor('white')
+        'color': getPygameColor('start-menu-text')
     })  # White text for better contrast
     confirm_button_text = createText("Lets Battle", {
         'font-size': getFontSizePx('med'),
-        'color': getPygameColor('white')
+        'color': getPygameColor('start-menu-text')
     })
 
     # Button dimensions and positions
