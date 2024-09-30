@@ -188,6 +188,5 @@ def start_game():
                 pass
             elif difficulty == "Hard":
                 pvc_hard(count)
-
-            elif mode == "Go Back":
-                start_game()
+        elif mode == "Go Back":
+            start_game()
