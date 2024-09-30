@@ -9,12 +9,11 @@ Author(s): Anil Thapa, Michelle Chen, Nathan Bui
 Creation Date: 09/13/2024
 """
 import logging
-
 import pygame
 import settings
-
 from views import showStartMenu, showOpponentSelection, showAIModeSelection
 from play_modes import *
+from play_modes.ai_easy import pvc_easy
 
 def start_game(): # (A) main function that starts the game
     pygame.init() # (A) initialize the pygame engine so it can listen for inputs/handle screens
@@ -36,8 +35,7 @@ def start_game(): # (A) main function that starts the game
             difficulty = showAIModeSelection()
 
             if difficulty == "Easy":
-                logging.error("AI mode is not implemented yet.")
-                pass
+                pvc_easy(count)
             elif difficulty == "Medium":
                 pvc_medium(count)
             elif difficulty == "Hard":
