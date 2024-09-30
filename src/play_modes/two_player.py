@@ -49,10 +49,10 @@ def pvp(ship_count):
             ))  # (A) push the rendered text to the top of the screen, placed horizontal and in the middle vertically
 
             # (A) handle the player turn, will swap players (curr/enemy) after each successful playerturn
-            game, currentPlayer, enemy = handlePlayerTurn(currentPlayer, enemy)
+            game = handlePlayerTurn(currentPlayer, enemy)
             if game:  # (A) if the game is still going on... may be a redundant conditional in hindsight
-                showTurnTransitionScreen(currentPlayer.num)
                 currentPlayer, enemy = enemy, currentPlayer  # (A) then swap the two players
+                showTurnTransitionScreen(currentPlayer.num)
 
             # Draw the exit button on the gameplay screen
             pygame.draw.rect(screen, (0, 0, 0), exit_button_rect, 2)  # Draw a black border for visibility

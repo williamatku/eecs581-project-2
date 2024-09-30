@@ -7,7 +7,7 @@ from models import Player, PlayerTurn
 from utils import drawLabels, createText, drawBackground, getScreen, getPygameColor, getFontSizePx
 
 
-def showTurnTransitionScreen(pturn: PlayerTurn):
+def showTurnTransitionScreen(pturn: PlayerTurn) -> None:
 
     screen = getScreen()
     # Text for the buttons

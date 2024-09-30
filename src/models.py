@@ -108,7 +108,7 @@ class Player:  # stores the data for each player so we can alternate easily with
         print()
 
 
-class AIGuessState:
+class MediumAIGuessState:
     def __init__(self):
         self.on_a_roll = False #Checks if the AI is currently on a ROLL
         self.first_successful_guess: Optional[(int, int)] = None #Stores the first hit in a tuple

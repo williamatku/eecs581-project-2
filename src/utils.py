@@ -6,7 +6,7 @@ import sys
 import random
 
 
-from models import Player, AIGuessState
+from models import Player, MediumAIGuessState
 
 
 def playSound(sound):
@@ -92,60 +92,6 @@ def drawLabels(xOffset, yOffset):
             xOffset - 25,
             yOffset + i * settings.BLOCKHEIGHT + settings.BLOCKHEIGHT // 2 - label.get_height() // 2
         ))  # (M) push again to the to pof the screen with blit and space it out with i * BLOCKHEIGHT
-
-
-def drawBoard(player, enemy):  # (M) function that draws the board in the main game loop
-
-    screen = getScreen()
-
-    for x in range(settings.COLS):  # (A) iterate through each column
-        for y in range(settings.ROWS):  # (A) iterate through each row as well to work with specific blocks of the matrix
-            pyRect = (x * settings.BLOCKWIDTH + xOffset, y * settings.BLOCKHEIGHT + yOffset, settings.BLOCKWIDTH,
-                      settings.BLOCKHEIGHT)  # (A) rectangle tuple that replaces a rectangle object with (x, y, width, height)
-
-            should_highlight = False  # (A) variable to determine if we should highlight the current square in the loop
-            if 0 <= hoverX < settings.COLS and 0 <= hoverY < settings.ROWS:  # (A) for one, it is mandatory to be within the board to even highlight
-                if direction == 0 and hoverY == y and hoverX <= x < hoverX + currentShip and hoverX + currentShip <= settings.COLS:  # (A) now we figure out based on the direction (0 = right), is the currentNode covered by the path starting from the block the mouse points at
-                    should_highlight = True  # (A) if direction == 0, then if node falls within the bounds of the path, (hoverX <= x < hoverX + currentShip) and also not out of bound (hoverX + currentShip <= COLS)
-                elif direction == 1 and hoverX == x and hoverY <= y < hoverY + currentShip and hoverY + currentShip <= settings.ROWS:
-                    should_highlight = True  # (A) similar logic to above, but direction == 1 is down, so check if y falls under that y path while not going out of bound
-                elif direction == 2 and hoverY == y and hoverX - currentShip < x <= hoverX and hoverX - currentShip + 1 >= 0:  # (A) similar logic to above, direction 2 == left
-                    should_highlight = True  # (A) one thing to note is that hoverY == y just means same row or same col depending on the direction of the path (if right, then col should be same)
-                elif direction == 3 and hoverX == x and hoverY - currentShip < y <= hoverY and hoverY - currentShip + 1 >= 0:  # (A) similar logic to above, direction 3 == top
-                    should_highlight = True
-
-            if should_highlight:  # (A) if we should highlight this block
-                pygame.draw.rect(screen, (155, 155, 155),
-                                 pyRect)  # (A) then instead of a normal color we draw a gray block, but has a pink tone thanks to the background
-            elif player.board[y][x] != 0:  # (A) if the block isn't even empty, e.g. it has a ship
-                ship_size = player.board[y][
-                    x]  # (A) find the type of ship/ship size by checking the player's board
-                ship_color = settings.SHIPCOLORS.get(ship_size,
-                                            (0, 255, 0))  # (A) get the color corresponding to the type of ship
-                pygame.draw.rect(screen, ship_color, pyRect)  # (A) draw the block with the ship's color
-
-            pygame.draw.rect(screen, lineColor, pyRect,
-                             1)  # (A) this draws the grid, the extra parameter at the end determines if it's 'hollow' and has a border strength
-
-    # print(hoverX, hoverY)
-    pygame.display.flip()  # (A) then update the display so all the little color changes happen simutaneously
-
-    for event in pygame.event.get():  # (A) listen for events in the game
-        if event.type == pygame.QUIT:  # (A) if quit (x out) then quit the game
-            pygame.quit()
-        elif event.type == pygame.KEYDOWN:  # (A) pygame.KEYDOWN means that the user pressed down a key, nothing specific here
-            if event.key == pygame.K_r:  # (A) specifically, if it is the R key (pygame.K_r) then rotate the ship by changing the direction
-                direction = (direction + 1) % 4  # (A) this will just cycle within the (0-3) range by using modulo 4
-        elif event.type == pygame.MOUSEBUTTONDOWN:  # (A) if the mouse was clicked
-            if event.button == 1:  # (A) and the mouse click was the left click
-                if 0 <= hoverX < settings.COLS and 0 <= hoverY < settings.ROWS:  # (A) first check the bounds of the click to make sure it was valid
-                    if player.place_ship(hoverX, hoverY, currentShip,
-                                         direction):  # (A) then see if you can place the ship within the player object's matrix
-                        if ships:  # (A) if there are more ships to place
-                            currentShip = ships.pop()  # (A) pop the next ship and repeat the loop
-                        else:
-                            waiting = False  # (A) break the loop otherwise
-
 
 def drawBoard(player, enemy):  # (M) function that draws the board in the main game loop
 
@@ -348,68 +294,6 @@ def handlePlayerTurn(currentPlayer, enemy):
                             waiting_for_input = False
 
     return True
-
-
-def handleMediumAITurn(ai_opponent: Player, player, ai_guess_state: AIGuessState):
-
-    if ai_guess_state.on_a_roll: #If first was a hit 
-        mouseX, mouseY = ai_guess_state.produce_guess() #Get a guess from algorithm 
-
-        guess = None
-
-        try:
-            guess = ai_opponent.guesses[mouseY][mouseX] #Gets the passed guesses
-        except IndexError:
-            pass #if the next guess in algorithm is out of bounds Handles the excpetion
-
-        if guess == 0: 
-            #Checks to see if the AI hit the other players ships
-            hit = ai_opponent.check_hit(player, mouseX, mouseY)
-            #if number of sunk ships increaes then reset AI to random guess
-            if ai_guess_state.curr_sunk_ships < player.count_sunk_ships():
-                ai_guess_state.reset()
-            elif hit:
-                #If the next hit was a hit then continue with the guessing strategy 
-                ai_guess_state.continue_roll((mouseX, mouseY))
-            else:
-                #if the hit was a miss then tally it as a bas gift 
-                ai_guess_state.bad_guess((mouseX, mouseY))
-
-            #Check if the player has won after the guess
-            if check_for_win(player):
-                return handleWin(ai_opponent, player)
-        else:
-            #Mark a miss as a bad guess
-            ai_guess_state.bad_guess((mouseX, mouseY))
-            #Calls function to handle medium ai difficulty 
-            return handleMediumAITurn(ai_opponent, player, ai_guess_state)
-        #returns true once the turn is complete 
-        return True
-    else:
-        #updates the amount of sunk ships 
-        ai_guess_state.curr_sunk_ships = player.count_sunk_ships()
-
-        #Random positon for AI guess
-        mouseX = random.randint(0, 9)
-        mouseY = random.randint(0, 9)
-
-        #Checks to see if the AI has guessed that position yet 
-        if ai_opponent.guesses[mouseY][mouseX] == 0:
-            #Checks to see if the guess was a hit 
-            hit = ai_opponent.check_hit(player, mouseX, mouseY)
-
-            if hit:
-                #If it was a hit then start a roll 
-                ai_guess_state.start_roll((mouseX, mouseY))
-
-            #Checks to see if player won after guess
-            if check_for_win(player):
-                return handleWin(ai_opponent, player)
-        else:
-            #Handles the AI turn for medium 
-            return handleMediumAITurn(ai_opponent, player, ai_guess_state)
-
-        return True
 
 
 def check_for_win(player):
