@@ -14,9 +14,9 @@ import pygame
 import settings
 import sys
 
-from utils import handlePlayerTurn, drawBackground, getScreen, createText, getPygameColor, getFontSizePx
+from utils import *
 from views import showStartMenu, showGameView, showAIModeSelection, showTurnTransitionScreen, showOpponentSelection
-from models import Player
+from models import Player, AIGuessState
 
 
 def pvp(ship_count):
@@ -67,7 +67,7 @@ def pvp(ship_count):
             # Draw the exit button on the gameplay screen
             pygame.draw.rect(screen, (0, 0, 0), exit_button_rect, 2)  # Draw a black border for visibility
             pygame.draw.rect(screen, (255, 0, 0), exit_button_rect)  # Draw the red button
-            screen.blit(exit_text, (exit_button_rect.centerx - exit_text.get_width() // 2, 
+            screen.blit(exit_text, (exit_button_rect.centerx - exit_text.get_width() // 2,
                                     exit_button_rect.centery - exit_text.get_height() // 2))
 
         pygame.display.flip()  # (A) flip to update the display as needed
@@ -130,24 +130,50 @@ def pvc_hard(count):
     clock.tick(settings.FPS)  # (A) FPS (initialized at the start of the code) will determine refresh rate for the game
 
 
-def start_game(): # (A) main function that starts the game
-    pygame.init() # (A) initialize the pygame engine so it can listen for inputs/handle screens
-    pygame.display.set_caption("battleship") # (A) set up the title of the game
+
+def pvc_medium(count): #Ai medium
+    clock = pygame.time.Clock()
+
+    logging.info("You chose medium mode!")
+    player = Player(1)
+    ai_opponent: Player = Player(2)
+    random_placement(count, ai_opponent) #Places ships in the random spots for AI
+    ai_guess_state = AIGuessState() #Class that stores hits, sunk ships, and misses
+
+    drawBackground() #Draws the blue background
+
+
+    showGameView(count, player) #Lets you place ships for how many you have clicked
+
+
+    game = True
+    while game:
+        drawBackground()
+
+        logging.info('player turn init')
+        game = handlePlayerTurn(player, ai_opponent) #Puts everything on the board and waits for input from Player
+        logging.info('ai turn init')
+        game = handleMediumAITurn(ai_opponent, player, ai_guess_state) #Waits for input from AiMedium mode
+        ai_opponent.spit_guesses() #Shows your guesses
+
+        clock.tick(settings.FPS)
+
+
+def start_game():
+    pygame.init()
+    pygame.display.set_caption("battleship")
 
     # initialize the main screen with a display of GAMEWIDTH and GAMEHEIGHT
     pygame.display.set_mode((settings.GAMEWIDTH, settings.GAMEHEIGHT))
 
-    #count = showStartMenu()  # (A) initial getCount() will be the default starting screen to find how many ships to play with
 
-    # Call the mode selection screen
-    #mode = showOpponentSelection()
 
     while True:
-        count = showStartMenu()# (A) initial getCount() will be the default starting screen to find how many ships to play with
-        mode = showOpponentSelection()# Call the mode selection screen
+        count = showStartMenu()  # (A) initial getCount() will be the default starting screen to find how many ships to play with
 
+        # Call the mode selection screen
+        mode = showOpponentSelection()
         if mode == "Player":  # If the user selected to play against another player
-        
             pvp(count)
 
         elif mode == "AI":  # AI functionality placeholder
@@ -162,10 +188,6 @@ def start_game(): # (A) main function that starts the game
                 pass
             elif difficulty == "Hard":
                 pvc_hard(count)
-            elif difficulty == "Go Back":
-                continue
-                
-        
-        elif mode == "Go Back":
-            start_game()
-            
+
+            elif mode == "Go Back":
+                start_game()
