@@ -78,7 +78,7 @@ def drawBoardAIHard(player):  # Function that draws the player's board and the A
     xOffset = 150  # Horizontal offset to center the boards
 
     # Draw the labels for the player's board
-    drawLabels(screen, xOffset, topOffset)  
+    drawLabels(xOffset, topOffset)  
     for x in range(settings.COLS):  
         for y in range(settings.ROWS):  
             # Create a rectangle for the grid
@@ -101,7 +101,7 @@ def drawBoardAIHard(player):  # Function that draws the player's board and the A
                     pygame.draw.rect(screen, (128, 128, 128), pyRect)  # Draw gray for sunk ships
 
     # Draw the AI's guess board at the bottom
-    drawLabels(screen, xOffset, bottomOffset)
+    drawLabels(xOffset, bottomOffset)
     
     for x in range(settings.COLS):  
         for y in range(settings.ROWS):
@@ -118,7 +118,7 @@ def drawBoardAIHard(player):  # Function that draws the player's board and the A
             # Display the player's ships on their own board
             if player.board[y][x] != 0:
                 ship_size = player.board[y][x]  # Get the size of the ship
-                ship_color = settings.SHIPCOLORS.get(ship_size, (0, 255, 0))  # Default to green if not found
+                ship_color = settings.COLORS.get(ship_size, (0, 255, 0))  # Default to green if not found
                 pygame.draw.rect(screen, ship_color, pyRect)  # Draw the ship
 
             # Show the AI's hits and misses on the player's ships
