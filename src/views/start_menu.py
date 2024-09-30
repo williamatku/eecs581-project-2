@@ -28,6 +28,11 @@ def showStartMenu():  # (M) initial screen that determines how many ships the pl
         'color': getPygameColor('start-menu-text')
     })
 
+     # Define the Exit button
+    exit_button_rect = pygame.Rect((settings.GAMEWIDTH // 2 - 150, 500), (300, 50))
+    exitFont = pygame.font.Font(None, 36)
+    exitText = exitFont.render("Exit Game", True, (255, 255, 255))
+
     ship_count = 1  # (M) minimum number of ships we can play with is one
     running = True  # (M) conditional for the game loop to continue
 
@@ -44,6 +49,11 @@ def showStartMenu():  # (M) initial screen that determines how many ships the pl
                                 400))  # (M) vertical placement is subjective, so we just pick whatever looks appealing
         screen.blit(disclaimer,
                     (settings.GAMEWIDTH // 2 - disclaimer.get_width() // 2, 450))  # (M) placing another text onto the screen
+        
+        # Draw the exit button
+        pygame.draw.rect(screen, (255, 0, 0), exit_button_rect)
+        screen.blit(exitText, (exit_button_rect.centerx - exitText.get_width() // 2, 
+                               exit_button_rect.centery - exitText.get_height() // 2))
 
         # (M) new text to render inside the loop because it's dependent on the count of what the user has chosen
         count_text = createText(str(ship_count),{
@@ -61,6 +71,12 @@ def showStartMenu():  # (M) initial screen that determines how many ships the pl
             if event.type == pygame.QUIT:  # (M) if you close out, this is a pygame.QUIT event and ends the screen/game
                 pygame.quit()
                 sys.exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:# (M) if exit button is pressed application is closed
+                if event.button == 1:
+                    mouse_pos = event.pos
+                    if exit_button_rect.collidepoint(mouse_pos):
+                        pygame.quit()
+                        sys.exit()
             elif event.type == pygame.KEYDOWN:  # (M) keydown refers to the act of pushing any key down, not just the down key
                 if event.key == pygame.K_UP:  # (M) if this is going up, then user wants more ships
                     # (M) however, max count is 5, so if the user wants more than 5, just take the 5 which will be the min

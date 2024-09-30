@@ -17,16 +17,16 @@ COLORS = {
     'start-menu-text': (5, 5, 5),
     'ship-hit': (255, 0, 0),
     'ship-miss': (0, 0, 255),
-    'ship-sunk': (128, 128, 128)
+    'ship-sunk': (0, 0, 0)
 }
 
-SHIPCOLORS = {
-    1: (255, 100, 100),
-    2: (100, 255, 100),
-    3: (100, 100, 255),
-    4: (255, 255, 100),
-    5: (255, 100, 255)
-} # (A) global colors for different type of ships
+SHIP1 = pygame.image.load(STATIC_PATH.joinpath('images/shipImages/shipSize1.png'))
+SHIP2 = pygame.image.load(STATIC_PATH.joinpath('images/shipImages/shipSize2.png'))
+SHIP3 = pygame.image.load(STATIC_PATH.joinpath('images/shipImages/shipSize3.png'))
+SHIP4 = pygame.image.load(STATIC_PATH.joinpath('images/shipImages/shipSize4.png'))
+SHIP5 = pygame.image.load(STATIC_PATH.joinpath('images/shipImages/shipSize5.png'))
+
+SHIPIMAGE = {1: SHIP1, 2: SHIP2, 3: SHIP3, 4: SHIP4, 5: SHIP5} # (A) global colors for different type of ships
 
 SOUNDS = {
     'explosion': STATIC_PATH.joinpath('sounds/explosion.mp3'),
