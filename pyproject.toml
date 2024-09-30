@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "eecs581-project-2-battleship_MORRISWA"
-version = "1.0.1.dev0"
+version = "2.0.0"
 authors = [
     { name = "Bui, Nathan Toan Di", email = "nathanb948@ku.edu" },
     { name = "Chen, Michelle", email = "mic.chen3@ku.edu" },
