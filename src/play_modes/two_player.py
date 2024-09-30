@@ -4,10 +4,11 @@ import pygame
 import settings
 import sys
 
-from utils import handlePlayerTurn, drawBackground, getScreen, createText, getPygameColor, getFontSizePx, drawLabels, handleMiss, playSound
-from views import showStartMenu, showGameView, showAIModeSelection, showTurnTransitionScreen, showOpponentSelection
+from utils import *
+from views import showStartMenu, place_ships, showAIModeSelection, show_turn_transition, showOpponentSelection, show_active_game_view
 from models import Player
 from models import Player, PlayerTurn
+
 
 def pvp(ship_count):
 
@@ -33,10 +34,10 @@ def pvp(ship_count):
     while game:  # (A) while the game is running
         drawBackground()
         if setUp:  # (A) conditional met with first time run of the loop
-            showGameView(ship_count, playerOne)  # (A) create the matrix for playerOne with ship selection
-            showTurnTransitionScreen('2')
-            showGameView(ship_count, playerTwo)  # (A) do the same for playerTwo
-            showTurnTransitionScreen('1')
+            place_ships(ship_count, playerOne)  # (A) create the matrix for playerOne with ship selection
+            show_turn_transition('2')
+            place_ships(ship_count, playerTwo)  # (A) do the same for playerTwo
+            show_turn_transition('1')
             setUp = False  # (A) set condition to false, won't run again for remainder of the game
         else:  # (A) when the boards have been set up
             turn_text = createText(f"Player {currentPlayer.num}'s Turn", {
@@ -49,10 +50,10 @@ def pvp(ship_count):
             ))  # (A) push the rendered text to the top of the screen, placed horizontal and in the middle vertically
 
             # (A) handle the player turn, will swap players (curr/enemy) after each successful playerturn
-            game = handlePlayerTurn(currentPlayer, enemy)
+            game = show_active_game_view(currentPlayer, enemy)
             if game:  # (A) if the game is still going on... may be a redundant conditional in hindsight
                 currentPlayer, enemy = enemy, currentPlayer  # (A) then swap the two players
-                showTurnTransitionScreen(currentPlayer.num)
+                show_turn_transition(currentPlayer.num)
 
             # Draw the exit button on the gameplay screen
             pygame.draw.rect(screen, (0, 0, 0), exit_button_rect, 2)  # Draw a black border for visibility

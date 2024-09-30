@@ -7,7 +7,7 @@ from models import Player, PlayerTurn
 from utils import drawLabels, createText, drawBackground, getScreen, getPygameColor, getFontSizePx
 
 
-def showTurnTransitionScreen(pturn: PlayerTurn) -> None:
+def show_turn_transition(pturn: PlayerTurn) -> None:
 
     screen = getScreen()
     # Text for the buttons
@@ -55,6 +55,5 @@ def showTurnTransitionScreen(pturn: PlayerTurn) -> None:
                 mouse_pos = event.pos
                 # Check if clicked on AI button
                 if confirm_button.collidepoint(mouse_pos):
-                    logging.info("Clicked")
                     return
                 
