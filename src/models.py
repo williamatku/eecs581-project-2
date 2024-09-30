@@ -96,15 +96,6 @@ class Player:  # stores the data for each player so we can alternate easily with
         #Returns all the sunk ships 
         return s1 + s2 + s3 + s4 + s5
 
-    def spit_board(self):
-        for row in self.board:
-            print(row)
-
-    def spit_guesses(self):
-        for row in self.guesses:
-            print(row)
-        print()
-
 
 class MediumAIGuessState:
 

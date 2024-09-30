@@ -46,32 +46,6 @@ def playerTurnAIHard(player: Player):
     return False
 
 
-def handleWinHardAI():  # Function called when hard AI wins a match
-
-    screen = getScreen()
-
-    # (N) display 'AI Wins!'
-    winner_text = createText(
-        "AI Wins!",
-        {
-            'font-size': getFontSizePx('lg'),
-            'color': (255, 0, 0)
-        }
-    )
-
-    drawBackground()
-    screen.blit(
-        winner_text,
-        (
-            settings.GAMEWIDTH // 2 - winner_text.get_width() // 2,
-            settings.GAMEHEIGHT // 2
-        )
-    )
-    pygame.display.flip()
-    pygame.time.wait(3000)  # (N) wait a bit
-    return False  # False is returned because this function is set to the variable game, so when game == False the application finishes running
-
-
 def pvc_hard(count):  # Function to handle gameplay between user and AI hard mode
     screen = getScreen()
     clock = pygame.time.Clock()
@@ -146,8 +120,8 @@ def pvc_hard(count):  # Function to handle gameplay between user and AI hard mod
                         break
 
                 if all(cell == 0 for row in new_cheating_board for cell in row):
-                    print("player 1 looses!")
-                    game = handleWinHardAI()
+                    handle_ai_win()
+                    game = False
 
         pygame.display.flip()  # Update the display
 
