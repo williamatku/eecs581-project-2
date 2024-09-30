@@ -39,7 +39,7 @@ A Python implementation of the classic battleship game using the pygame library.
         - NOTE: to deactivate project environment
 
               deactivate
-        - NOTE: to reset project environment (macos, linux,)
+        - NOTE: to reset project environment 
 
               rm -rf bin include lib pyvenv.cfg
     - Windows Powershell
@@ -48,7 +48,7 @@ A Python implementation of the classic battleship game using the pygame library.
         - NOTE: to deactivate project environment
 
               .\Scripts\deactivate.bat
-        - NOTE: to reset project environment (macos, linux,)
+        - NOTE: to reset project environment 
 
               rm -r include
               rm -r lib 
@@ -78,3 +78,5 @@ A Python implementation of the classic battleship game using the pygame library.
 - **Coders:** Anil, Michelle, Nathan
 - **Tester:** Justin
 - **Documentation:** Jaret
+- **Contributors:** William Morris, Kevin Rivers, Makenna Loewenherz,
+Rahul Bhattachan, Timothy Holmes
