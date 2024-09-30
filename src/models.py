@@ -107,47 +107,52 @@ class Player:  # stores the data for each player so we can alternate easily with
 
 
 class MediumAIGuessState:
+
     def __init__(self):
-        self.on_a_roll = False #Checks if the AI is currently on a ROLL
-        self.first_successful_guess: Optional[(int, int)] = None #Stores the first hit in a tuple
-        self.last_successful_guess: Optional[(int, int)] = None #Stores the last hit in a tuple
         self.curr_sunk_ships = None #Current number of sunk ships
-        self.guesses = [] #stores all the guesses made in a list
-        self.orientation = 0 #If two correct guesses in a row then change orientation to go the same direction 
-        self.failed_guesses = 0 #Counts all the failed guesses 
 
-    def start_roll(self, fsg): #Starts a roll with the first correct guess
-        self.on_a_roll = True
-        self.first_successful_guess = fsg
-        self.last_successful_guess = fsg
-        self.guesses.append(fsg) #adds guess to the list
+        self._on_a_roll = False #Checks if the AI is currently on a ROLL
+        self._first_successful_guess: Optional[(int, int)] = None #Stores the first hit in a tuple
+        self._last_successful_guess: Optional[(int, int)] = None #Stores the last hit in a tuple
+        self._orientation = 0 #If two correct guesses in a row then change orientation to go the same direction
+        self._failed_guesses = 0 #Counts all the failed guesses
 
-    def continue_roll(self, lsg): #Continutes the roll with the last correct guess
-        self.last_successful_guess = lsg
-        self.failed_guesses = 0
-        self.guesses.append(lsg) #adds guess to the list 
 
-    def bad_guess(self, bad_guezz):
-        self.guesses.append(bad_guezz)
-        if self.failed_guesses > 3:
-            #Resets to first correct guess if more than 3 consecutive guesses
-            self.last_successful_guess = self.first_successful_guess
-            self.failed_guesses = 0
+    def track_player_ship(self, location: (int, int)): #Starts a roll with the first correct guess
+        self._on_a_roll = True
+        self._failed_guesses = 0
+        if self._first_successful_guess is None:
+            self._first_successful_guess = location
+        self._last_successful_guess = location
+
+
+    def stop_tracking_ship(self):
+        #Resets to the initial values
+        self.curr_sunk_ships = None
+
+        self._orientation = 0
+        self._last_successful_guess = None
+        self._first_successful_guess = None
+        self._failed_guesses = 0
+        self._on_a_roll = False
+
+
+    def next_guess(self):
+        if self._failed_guesses > 3:
+            #Resets to first correct guess if more than 3 consecutive guesses fail
+            self._last_successful_guess = self._first_successful_guess
+            self._failed_guesses = 0
         else:
             #Changes the orientation and increments failed guesses
-            self.orientation = (self.orientation + 1) % 4
-            self.failed_guesses += 1
+            self._orientation = (self._orientation + 1) % 4
+            self._failed_guesses += 1
 
-    def produce_guess(self):
-        last_was_success = self.last_successful_guess != None
-        x, y = None, None
-        if last_was_success:
-            x, y = self.last_successful_guess
-        else:
-            x, y = self.first_successful_guess
+
+    def guess(self):
+        x, y = self._last_successful_guess
 
         #Generates the next guess based on this algorithm
-        match self.orientation:
+        match self._orientation:
             case 0:
                 return x, y + 1
             case 1:
@@ -157,12 +162,9 @@ class MediumAIGuessState:
             case 3:
                 return abs(x - 1), y
 
-    def reset(self):
-        #Resets to the initial values 
-        self.orientation = 0
-        self.last_successful_guess = None
-        self.first_successful_guess = None
-        self.guesses = []
-        self.failed_guesses = 0
-        self.on_a_roll = False
-        self.curr_sunk_ships = None
+
+    def tracking_player_ship(self) -> bool:
+        return self._on_a_roll
+
+    def tracking_ship_sunk(self, player: Player):
+        return self.curr_sunk_ships < player.count_sunk_ships()

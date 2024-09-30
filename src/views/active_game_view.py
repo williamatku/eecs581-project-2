@@ -3,6 +3,7 @@ import pygame
 
 
 from utils import *
+from models import Player
 
 
 def show_active_game_view(currentPlayer: Player, enemy: Player, enemy_is_ai = False):
@@ -23,7 +24,10 @@ def show_active_game_view(currentPlayer: Player, enemy: Player, enemy_is_ai = Fa
     margin = 30
     exit_button_rect = pygame.Rect((settings.GAMEWIDTH - button_width - margin, margin), (button_width, button_height))
     exit_font = pygame.font.Font(None, 24)
-    exit_text = exit_font.render("Exit Game", True, (255, 255, 255))
+    exit_text = createText('Exit Game', {
+        'color': getPygameColor('black'),
+        'font-size': getFontSizePx('sm')
+    })
 
     while waiting_for_input:  # (A) input waiting loop
         # (A) draw the board based on player/enemy data (top is guesses, bottom is player)
