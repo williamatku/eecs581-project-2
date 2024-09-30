@@ -17,21 +17,21 @@ def showStartMenu():  # (M) initial screen that determines how many ships the pl
     })
     prompt = createText("How many ships would you like? (1-5)", {
         'font-size': getFontSizePx('med'),
-        'color': getPygameColor('start-menu-text')
+        'color': getPygameColor('start-menu-text-2')
     })
     startText = createText("Press ENTER to start", {
         'font-size': getFontSizePx('med'),
-        'color': getPygameColor('start-menu-text')
+        'color': getPygameColor('start-menu-text-2')
     })
     disclaimer = createText("Use the up and down arrows to adjust the # of ships", {
         'font-size': getFontSizePx('sm'),
-        'color': getPygameColor('start-menu-text')
+        'color': getPygameColor('start-menu-text-2')
     })
 
      # Define the Exit button
     exit_button_rect = pygame.Rect((settings.GAMEWIDTH // 2 - 150, 500), (300, 50))
     exitFont = pygame.font.Font(None, 36)
-    exitText = exitFont.render("Exit Game", True, (255, 255, 255))
+    exitText = exitFont.render("Exit Game", True, getPygameColor('start-menu-text'))
 
     ship_count = 1  # (M) minimum number of ships we can play with is one
     running = True  # (M) conditional for the game loop to continue
@@ -51,7 +51,7 @@ def showStartMenu():  # (M) initial screen that determines how many ships the pl
                     (settings.GAMEWIDTH // 2 - disclaimer.get_width() // 2, 450))  # (M) placing another text onto the screen
         
         # Draw the exit button
-        pygame.draw.rect(screen, (255, 0, 0), exit_button_rect)
+        pygame.draw.rect(screen, (141, 28, 22), exit_button_rect)
         screen.blit(exitText, (exit_button_rect.centerx - exitText.get_width() // 2, 
                                exit_button_rect.centery - exitText.get_height() // 2))
 

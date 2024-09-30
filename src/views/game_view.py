@@ -32,7 +32,7 @@ def showGameView(count, player):  # (A) startboard will have the user (current p
     margin = 30
     exit_button_rect = pygame.Rect((settings.GAMEWIDTH - button_width - margin, margin), (button_width, button_height))
     exit_font = pygame.font.Font(None, 24)
-    exit_text = exit_font.render("Exit Game", True, (255, 255, 255))
+    exit_text = exit_font.render("Exit Game", True, getPygameColor('start-menu-text'))
 
 
     ships = [val + 1
@@ -55,7 +55,7 @@ def showGameView(count, player):  # (A) startboard will have the user (current p
 
         # Draw the exit button at the top right
         pygame.draw.rect(screen, (0, 0, 0), exit_button_rect, 2)
-        pygame.draw.rect(screen, (255, 0, 0), exit_button_rect)
+        pygame.draw.rect(screen, (141, 28, 22), exit_button_rect)
         screen.blit(exit_text, (exit_button_rect.centerx - exit_text.get_width() // 2,
                                exit_button_rect.centery - exit_text.get_height() // 2))
 
