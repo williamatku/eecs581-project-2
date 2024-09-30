@@ -17,7 +17,7 @@ COLORS = {
     'start-menu-text': (5, 5, 5),
     'ship-hit': (255, 0, 0),
     'ship-miss': (0, 0, 255),
-    'ship-sunk': (128, 128, 128)
+    'ship-sunk': (0, 0, 0)
 }
 
 SHIP1 = pygame.image.load('images/shipImages/shipSize1.png')

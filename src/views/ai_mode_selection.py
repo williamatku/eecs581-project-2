@@ -23,6 +23,10 @@ def showAIModeSelection():
         'font-size': getFontSizePx('med'),
         'color': getPygameColor('white')
     })
+    GoBack_text = createText("Go Back", {
+        'font-size': getFontSizePx('med'),
+        'color': getPygameColor('white')
+    })
 
     # Button dimensions and positions
     button_width = 300
@@ -30,6 +34,7 @@ def showAIModeSelection():
     easy_button_rect = pygame.Rect((settings.GAMEWIDTH // 2 - button_width // 2, 200), (button_width, button_height))
     medium_button_rect = pygame.Rect((settings.GAMEWIDTH // 2 - button_width // 2, 300), (button_width, button_height))
     hard_button_rect = pygame.Rect((settings.GAMEWIDTH // 2 - button_width // 2, 400), (button_width, button_height))
+    GoBack_button_rect = pygame.Rect((settings.GAMEWIDTH // 2 - button_width // 2, 500), (button_width, button_height))
 
     running = True
     while running:
@@ -40,16 +45,19 @@ def showAIModeSelection():
         pygame.draw.rect(screen, (0, 100, 0), easy_button_rect.move(shadow_offset, shadow_offset), border_radius=10)
         pygame.draw.rect(screen, (0, 100, 0), medium_button_rect.move(shadow_offset, shadow_offset), border_radius=10)
         pygame.draw.rect(screen, (0, 100, 0), hard_button_rect.move(shadow_offset, shadow_offset), border_radius=10)
-
+        pygame.draw.rect(screen, (100, 0, 0), GoBack_button_rect.move(shadow_offset, shadow_offset), border_radius=10)
         # Draw the buttons with rounded corners
         pygame.draw.rect(screen, (0, 200, 0), easy_button_rect, border_radius=10)  # Rounded corners with border_radius
         pygame.draw.rect(screen, (0, 200, 0), medium_button_rect, border_radius=10)
         pygame.draw.rect(screen, (0, 200, 0), hard_button_rect, border_radius=10)
-
+        pygame.draw.rect(screen, (200, 0, 0), GoBack_button_rect, border_radius=10)
         # Draw the text on the buttons
         screen.blit(easy_text, ( easy_button_rect.centerx - easy_text.get_width() // 2, easy_button_rect.centery - easy_text.get_height() // 2))
         screen.blit(medium_text, (medium_button_rect.centerx - medium_text.get_width() // 2, medium_button_rect.centery - medium_text.get_height() // 2))
         screen.blit(hard_text, ( hard_button_rect.centerx - hard_text.get_width() // 2, hard_button_rect.centery - hard_text.get_height() // 2))
+        screen.blit(GoBack_text, (
+            GoBack_button_rect.centerx - GoBack_text.get_width() // 2, 
+            GoBack_button_rect.centery - GoBack_text.get_height() // 2))
 
         pygame.display.flip()  # Update screen
 
@@ -77,3 +85,9 @@ def showAIModeSelection():
                     logging.info("hard mode selected")  # Placeholder until AI functionality is complete
                     running = False
                     return "Hard"
+                
+                if GoBack_button_rect.collidepoint(mouse_pos):  # Placeholder until AI functionality is complete
+                    logging.info("GoBack selected")
+                    running = False
+                    running = False
+                    return "Go Back" 

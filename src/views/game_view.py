@@ -1,6 +1,6 @@
 
 import pygame
-
+import sys
 import settings
 from models import Player, PlayerTurn
 from utils import drawLabels, createText, drawBackground, getScreen, getFontSizePx, getPygameColor
@@ -26,6 +26,15 @@ def showGameView(count, player):  # (A) startboard will have the user (current p
         'color': getPygameColor('start-menu-text')
     })  # (A) disclaimer on how to rotate and place ships
 
+    # Define the Exit button for the top-right positioning
+    button_width = 100
+    button_height = 40
+    margin = 30
+    exit_button_rect = pygame.Rect((settings.GAMEWIDTH - button_width - margin, margin), (button_width, button_height))
+    exit_font = pygame.font.Font(None, 24)
+    exit_text = exit_font.render("Exit Game", True, (255, 255, 255))
+
+
     ships = [val + 1
              for val in
              range(count)]  # (A) rubric outlines each ship has a val of their count equivalent so [1,2,3.. etc.]
@@ -43,6 +52,13 @@ def showGameView(count, player):  # (A) startboard will have the user (current p
             settings.GAMEWIDTH // 2 - instruction.get_width() // 2,
             yOffset + 315
         ))  # (A) same with the disclaimer, GAMEWIDTH // 2 - instruction.get_width() // 2 will just center the text
+
+        # Draw the exit button at the top right
+        pygame.draw.rect(screen, (0, 0, 0), exit_button_rect, 2)
+        pygame.draw.rect(screen, (255, 0, 0), exit_button_rect)
+        screen.blit(exit_text, (exit_button_rect.centerx - exit_text.get_width() // 2,
+                               exit_button_rect.centery - exit_text.get_height() // 2))
+
 
         # (A) draw labels on the board as well for clarity, provide offsets to account for different scenarios
         drawLabels(xOffset, yOffset)
@@ -101,3 +117,7 @@ def showGameView(count, player):  # (A) startboard will have the user (current p
                                 currentShip = ships.pop()  # (A) pop the next ship and repeat the loop
                             else:
                                 waiting = False  # (A) break the loop otherwise
+                    mouse_pos = event.pos
+                    if exit_button_rect.collidepoint(mouse_pos):
+                        pygame.quit()
+                        sys.exit()
