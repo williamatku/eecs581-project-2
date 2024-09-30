@@ -1,0 +1,13 @@
+
+agile team agreement:
+27 story points (sp)
+~2 hr/sp
+70% of story point estimate dedicated to coding
+20% testing
+10% documenting
+
+time estimates:
+total = 54 hours = sp * (hr/sp), 27 * 2
+coding = 38 hours = total * allocation = 54 * 0.7
+testing = 11 hours = 54 * 0.2
+documenting = 5 hours = 54 * 0.1
