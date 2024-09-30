@@ -13,7 +13,7 @@ import pygame
 import settings
 from views import showStartMenu, showOpponentSelection, showAIModeSelection
 from play_modes import *
-from play_modes.ai_easy import pvc_easy
+
 
 def start_game(): # (A) main function that starts the game
     pygame.init() # (A) initialize the pygame engine so it can listen for inputs/handle screens

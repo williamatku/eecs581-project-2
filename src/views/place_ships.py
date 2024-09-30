@@ -6,7 +6,7 @@ from models import Player, PlayerTurn
 from utils import drawLabels, createText, drawBackground, getScreen, getFontSizePx, getPygameColor
 
 
-def place_ships(count, player):  # (A) startboard will have the user (current player) set up their board based on the count given
+def show_place_ships(count, player):  # (A) startboard will have the user (current player) set up their board based on the count given
 
     screen = getScreen()
     lineColor = (255, 255, 255)  # (A) color for the grid/matrix lines; should be (255, 255, 255) or white

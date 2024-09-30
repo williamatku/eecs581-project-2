@@ -211,3 +211,13 @@ def random_placement(count: int, ai_opponent: Player):
                     currentShip = ships.pop()  # (A) pop the next ship and repeat the loop
                 else:
                     placing = False  # (A) break the loop otherwise
+
+
+def handle_ai_win():
+    display_fullscreen_message("The computer has prevailed, you lose", {
+        'font-size': getFontSizePx('lg'),
+        'color': getPygameColor('ship-hit')
+
+    })
+    pygame.time.wait(3_000)  # (N) wait a bit
+

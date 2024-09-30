@@ -1,6 +1,6 @@
 
 from .start_menu import showStartMenu
-from .place_ships import place_ships
+from .place_ships import show_place_ships
 from .ai_mode_selection import showAIModeSelection
 from .opponent_selection import showOpponentSelection
 from .turn_transition import show_turn_transition

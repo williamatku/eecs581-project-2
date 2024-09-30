@@ -8,15 +8,6 @@ from views import *
 from models import Player, MediumAIGuessState
 
 
-def _ai_wins():
-    display_fullscreen_message("The computer has prevailed, you lose", {
-        'font-size': getFontSizePx('lg'),
-        'color': getPygameColor('ship-hit')
-
-    })
-    pygame.time.wait(3_000)  # (N) wait a bit
-
-
 def _handle_medium_ai_turn(ai_opponent: Player, player, ai_guess_state: MediumAIGuessState):
 
     if ai_guess_state.tracking_player_ship(): #If first was a hit
@@ -44,7 +35,7 @@ def _handle_medium_ai_turn(ai_opponent: Player, player, ai_guess_state: MediumAI
 
             #Check if the player has won after the guess
             if check_for_win(player):
-                _ai_wins()
+                handle_ai_win()
                 return False
         else:
             #Mark a miss as a bad guess
@@ -72,7 +63,7 @@ def _handle_medium_ai_turn(ai_opponent: Player, player, ai_guess_state: MediumAI
 
             #Checks to see if player won after guess
             if check_for_win(player):
-                _ai_wins()
+                handle_ai_win()
                 return False
         else:
             #Handles the AI turn for medium
@@ -93,7 +84,7 @@ def pvc_medium(count): #Ai medium
 
     drawBackground() #Draws the blue background
 
-    place_ships(count, player) #Lets you place ships for how many you have clicked
+    show_place_ships(count, player) #Lets you place ships for how many you have clicked
 
 
     game = True

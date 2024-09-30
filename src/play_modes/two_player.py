@@ -5,7 +5,7 @@ import settings
 import sys
 
 from utils import *
-from views import showStartMenu, place_ships, showAIModeSelection, show_turn_transition, showOpponentSelection, show_active_game_view
+from views import showStartMenu, show_place_ships, showAIModeSelection, show_turn_transition, showOpponentSelection, show_active_game_view
 from models import Player
 from models import Player, PlayerTurn
 
@@ -34,9 +34,9 @@ def pvp(ship_count):
     while game:  # (A) while the game is running
         drawBackground()
         if setUp:  # (A) conditional met with first time run of the loop
-            place_ships(ship_count, playerOne)  # (A) create the matrix for playerOne with ship selection
+            show_place_ships(ship_count, playerOne)  # (A) create the matrix for playerOne with ship selection
             show_turn_transition('2')
-            place_ships(ship_count, playerTwo)  # (A) do the same for playerTwo
+            show_place_ships(ship_count, playerTwo)  # (A) do the same for playerTwo
             show_turn_transition('1')
             setUp = False  # (A) set condition to false, won't run again for remainder of the game
         else:  # (A) when the boards have been set up

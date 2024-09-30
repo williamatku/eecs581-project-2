@@ -5,7 +5,7 @@ import settings
 import sys
 
 from utils import *
-from views import showStartMenu, place_ships, showAIModeSelection, show_turn_transition, showOpponentSelection
+from views import showStartMenu, show_place_ships, showAIModeSelection, show_turn_transition, showOpponentSelection
 from models import Player
 from models import Player, PlayerTurn
 
@@ -90,7 +90,7 @@ def pvc_hard(count):  # Function to handle gameplay between user and AI hard mod
         drawBackground()
 
         if setUp:
-            place_ships(count, playerOne)  # Function for user to pick where they want to put their ships
+            show_place_ships(count, playerOne)  # Function for user to pick where they want to put their ships
             # AI gets matrix that says where all ships are
             cheating_board = playerOne.board  # Temporary variable cheating board to put this information in new_cheating_board
             for list in cheating_board:
