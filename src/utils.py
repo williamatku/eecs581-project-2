@@ -112,7 +112,8 @@ def drawLabels(xOffset, yOffset):
             yOffset + i * settings.BLOCKHEIGHT + settings.BLOCKHEIGHT // 2 - label.get_height() // 2
         ))  # (M) push again to the to pof the screen with blit and space it out with i * BLOCKHEIGHT
 
-def drawBoard(player, enemy):  # (M) function that draws the board in the main game loop
+
+def drawBoard(guesses_on_player_board, player_board, guesses_on_enemy_board):  # (M) function that draws the board in the main game loop
 
     screen = getScreen()
 
@@ -135,11 +136,11 @@ def drawBoard(player, enemy):  # (M) function that draws the board in the main g
             pygame.draw.rect(screen, lineColor, pyRect, 1)
 
             # (M) if the guess board does not have 0 at the guess matrix, it has one of 3 conditions
-            if player.guesses[y][x] == 'hit':  # (M) the guess was a hit
+            if guesses_on_enemy_board[y][x] == 'hit':  # (M) the guess was a hit
                 pygame.draw.rect(screen, getPygameColor('ship-hit'), pyRect)  # (M) draw red on the spot for a hit
-            elif player.guesses[y][x] == 'miss':  # (M) the guess was a miss
+            elif guesses_on_enemy_board[y][x] == 'miss':  # (M) the guess was a miss
                 pygame.draw.rect(screen, getPygameColor('ship-miss'), pyRect)  # (M) draw blue on the spot for a miss
-            elif player.guesses[y][x] == 'sunk':  # (N) if the ship is sunk
+            elif guesses_on_enemy_board[y][x] == 'sunk':  # (N) if the ship is sunk
                 pygame.draw.rect(screen, getPygameColor('ship-sunk'), pyRect)  # (N) draw the spot as gray
 
     # (M) now draw the labels but on the bottom board, so we use bottom offset
@@ -158,24 +159,24 @@ def drawBoard(player, enemy):  # (M) function that draws the board in the main g
             pygame.draw.rect(screen, lineColor, pyRect,1)
 
             # (M) since this is the player's board, we check the matrix to see if there are any ships at the spot
-            if player.board[y][x] != 0:
-                ship_size = player.board[y][x]  # (M) get the type of ship from the player's board
+            if player_board[y][x] != 0:
+                ship_size = player_board[y][x]  # (M) get the type of ship from the player's board
                 ship_image = settings.SHIPIMAGE.get(ship_size)  # (M) get the type of color from matching it to the global colors
                 ship_image = pygame.transform.scale(ship_image, (settings.BLOCKHEIGHT, settings.BLOCKWIDTH)) #transforms the ship image to fit inside the square
                 pygame.Surface.blit(screen, ship_image, pyRect) #Displays ship image to screen where player choses.
                 # pygame.draw.rect(screen, ship_color, pyRect)  # (M) draw the colored square onto the board
-            if enemy.guesses[y][x] != 0:  # (N) showing hits and misses on the player's own ships
 
-                # (N) check through the enemy's guessses and mark spots as red, blue, or gray for hits, misses, and ships that are sunk respectively
-                if enemy.guesses[y][x] == 'hit':
-                    pygame.draw.rect(screen, getPygameColor('ship-hit'), pyRect)  # (N) hit means red
-                elif enemy.guesses[y][x] == 'miss':  # (N) miss means blue
-                    pygame.draw.rect(screen, getPygameColor('ship-miss'), pyRect)
-                elif enemy.guesses[y][x] == 'sunk':  # (N) sunk means gray
-                    pygame.draw.rect(screen, getPygameColor('ship-sunk'), pyRect)
+            # (N) check through the enemy's guessses and mark spots as red, blue, or gray for hits, misses, and ships that are sunk respectively
+            if guesses_on_player_board[y][x] == 'hit':
+                pygame.draw.rect(screen, getPygameColor('ship-hit'), pyRect)  # (N) hit means red
+            elif guesses_on_player_board[y][x] == 'miss':  # (N) miss means blue
+                pygame.draw.rect(screen, getPygameColor('ship-miss'), pyRect)
+            elif guesses_on_player_board[y][x] == 'sunk':  # (N) sunk means gray
+                pygame.draw.rect(screen, getPygameColor('ship-sunk'), pyRect)
 
 
-def handlePlayerTurn(currentPlayer, enemy, enemy_is_ai = False):
+
+def handlePlayerTurn(currentPlayer: Player, enemy: Player, enemy_is_ai = False):
     """  # (N) function that handles the current player's turn.
         When a click event happens on the guess board, check for a hit or miss and update board accordingly.
         Some code taken from ChatGPT but mostly changed to fix errors
@@ -197,7 +198,7 @@ def handlePlayerTurn(currentPlayer, enemy, enemy_is_ai = False):
 
     while waiting_for_input:  # (A) input waiting loop
         # (A) draw the board based on player/enemy data (top is guesses, bottom is player)
-        drawBoard(currentPlayer, enemy)
+        drawBoard(enemy.guesses, currentPlayer.board, currentPlayer.guesses)
 
  # Draw the exit button at the top right
         pygame.draw.rect(screen, (0, 0, 0), exit_button_rect, 2)
@@ -225,7 +226,19 @@ def handlePlayerTurn(currentPlayer, enemy, enemy_is_ai = False):
                     if 0 <= gridX < settings.COLS and 0 <= gridY < settings.ROWS:  # (N) making sure the click is occuring on the guess board or it will not be inputted
                         if currentPlayer.guesses[gridY][gridX] == 0:  # (N) if the square hasn't been shot before
                             # (N) check if it was a hit or miss using the check_hit function
-                            if currentPlayer.check_hit(enemy, gridX, gridY):
+                            player_hit_ship = currentPlayer.check_hit(enemy, gridX, gridY)
+
+                            # (N) check for a win by calling the function on the enemy, if that is the case and the current player has won
+                            if check_for_win(enemy):
+                                display_fullscreen_message('You WIN!!!', {
+                                    'font-size': getFontSizePx('lg'),
+                                    'color': getPygameColor('ship-hit')
+
+                                })
+                                pygame.time.wait(3_000)  # (N) wait a bit
+                                return False
+
+                            if player_hit_ship:
                                 playSound('explosion')
                                 msg = 'HIT! Please turn the screen to the next player' \
                                     if not enemy_is_ai else 'HIT! AI is now playing...'
@@ -242,19 +255,8 @@ def handlePlayerTurn(currentPlayer, enemy, enemy_is_ai = False):
                             pygame.time.wait(settings.TURN_TIME_OUT_SECONDS * 1000)
 
                             # (N) redraw the board to show a hit or miss on the screen
-                            drawBoard(currentPlayer, enemy)
+                            drawBoard(enemy.guesses, currentPlayer.board, currentPlayer.guesses)
 
-                            # (N) check for a win by calling the function on the enemy, if that is the case and the current player has won
-                            if check_for_win(enemy):
-                                msg = f"Player {currentPlayer.num} Wins!" \
-                                    if not enemy_is_ai else 'You WIN!!!'
-                                display_fullscreen_message(msg, {
-                                    'font-size': getFontSizePx('lg'),
-                                    'color': getPygameColor('ship-hit')
-
-                                })
-                                pygame.time.wait(3_000)  # (N) wait a bit
-                                return False
 
                             # (N) if the game isn't over just set waiting_for_input to be false so that the while loop ends
                             waiting_for_input = False
