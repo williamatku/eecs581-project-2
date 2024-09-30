@@ -101,7 +101,7 @@ def pvc_medium(count): #Ai medium
     while game:
         drawBackground()
 
-        game = handlePlayerTurn(player, ai_opponent) #Puts everything on the board and waits for input from Player
+        game = handlePlayerTurn(player, ai_opponent, True) #Puts everything on the board and waits for input from Player
         game = handleMediumAITurn(ai_opponent, player, ai_guess_state) #Waits for input from AiMedium mode
 
         clock.tick(settings.FPS)

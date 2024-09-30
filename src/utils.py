@@ -228,14 +228,14 @@ def handlePlayerTurn(currentPlayer, enemy, enemy_is_ai = False):
                             if currentPlayer.check_hit(enemy, gridX, gridY):
                                 playSound('explosion')
                                 msg = 'HIT! Please turn the screen to the next player' \
-                                    if enemy_is_ai else 'HIT! AI is now playing...'
+                                    if not enemy_is_ai else 'HIT! AI is now playing...'
                                 display_fullscreen_message(msg, {
                                     'color': getPygameColor('ship-hit')
                                 })
                             else:
                                 playSound('missed')
                                 msg = 'MISS! Please turn the screen to the next player' \
-                                    if enemy_is_ai else 'MISS! AI is now playing...'
+                                    if not enemy_is_ai else 'MISS! AI is now playing...'
                                 display_fullscreen_message(msg, {
                                     'color': getPygameColor('ship-miss')
                                 })
@@ -247,7 +247,7 @@ def handlePlayerTurn(currentPlayer, enemy, enemy_is_ai = False):
                             # (N) check for a win by calling the function on the enemy, if that is the case and the current player has won
                             if check_for_win(enemy):
                                 msg = f"Player {currentPlayer.num} Wins!" \
-                                    if enemy_is_ai else 'You WIN!!!'
+                                    if not enemy_is_ai else 'You WIN!!!'
                                 display_fullscreen_message(msg, {
                                     'font-size': getFontSizePx('lg'),
                                     'color': getPygameColor('ship-hit')
