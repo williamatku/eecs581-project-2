@@ -4,7 +4,7 @@ import pygame
 import settings
 import sys
 
-from utils import handlePlayerTurn, drawBackground, getScreen, createText, getPygameColor, getFontSizePx, drawLabels, handleMiss, playSound
+from utils import *
 from views import showStartMenu, showGameView, showAIModeSelection, showTurnTransitionScreen, showOpponentSelection
 from models import Player
 from models import Player, PlayerTurn

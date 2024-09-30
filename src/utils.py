@@ -60,6 +60,25 @@ def drawBackground():
     getScreen().fill(getPygameColor('background'))
 
 
+def display_fullscreen_message(message, options={}):
+
+    screen = getScreen()
+
+    # (N) or if it was the miss do the exact same thing as for a hit but instead of "Hit" being displayed, put "Miss" instead
+    rendered_message = createText(
+        message,
+        options
+    )
+
+    drawBackground()
+    playSound('missed')
+    screen.blit(rendered_message, (
+        settings.GAMEWIDTH // 2 - rendered_message.get_width() // 2,
+        settings.GAMEHEIGHT // 2
+    ))
+    pygame.display.flip()
+
+
 def drawLabels(xOffset, yOffset):
     """ (M) function to just draw labels on the board as required by the rubric,
         offsets are so it does not collide with board
@@ -156,78 +175,7 @@ def drawBoard(player, enemy):  # (M) function that draws the board in the main g
                     pygame.draw.rect(screen, getPygameColor('ship-sunk'), pyRect)
 
 
-def handleHit():
-
-    screen = getScreen()
-
-    hit_text = createText(
-        'HIT! Please turn the screen to the next player',
-        {
-            'color': getPygameColor('ship-hit'),
-        }
-    )  # (N) essentially this is just a text fill on the screen that will indicate that it is a hit if the check_hit function returns True
-
-    drawBackground()
-    playSound('explosion')
-    screen.blit(
-        hit_text,
-        (
-            settings.GAMEWIDTH // 2 - hit_text.get_width() // 2,
-            settings.GAMEHEIGHT // 2
-        )
-    )  # (N) display the hit text on the screen
-    pygame.display.flip()  # (N) update display
-
-
-def handleMiss():
-
-    screen = getScreen()
-
-    # (N) or if it was the miss do the exact same thing as for a hit but instead of "Hit" being displayed, put "Miss" instead
-    miss_text = createText(
-        'MISS! Please turn the screen to the next player',
-        {
-            'font-size': getFontSizePx('med'),
-            'color': getPygameColor('ship-miss')
-        }
-    )
-
-    drawBackground()
-    playSound('missed')
-    screen.blit(miss_text, (
-        settings.GAMEWIDTH // 2 - miss_text.get_width() // 2,
-        settings.GAMEHEIGHT // 2
-    ))
-    pygame.display.flip()
-
-
-def handleWin(currentPlayer, enemy):
-
-    screen = getScreen()
-
-    # (N) display the current player # and that they have won the game
-    winner_text = createText(
-        f"Player {currentPlayer.num} Wins!",
-        {
-            'font-size': getFontSizePx('lg'),
-            'color': (255, 0, 0)
-        }
-    )
-
-    drawBackground()
-    screen.blit(
-        winner_text,
-        (
-            settings.GAMEWIDTH // 2 - winner_text.get_width() // 2,
-            settings.GAMEHEIGHT // 2
-        )
-    )
-    pygame.display.flip()
-    pygame.time.wait(3000)  # (N) wait a bit
-    return False
-
-
-def handlePlayerTurn(currentPlayer, enemy):
+def handlePlayerTurn(currentPlayer, enemy, enemy_is_ai = False):
     """  # (N) function that handles the current player's turn.
         When a click event happens on the guess board, check for a hit or miss and update board accordingly.
         Some code taken from ChatGPT but mostly changed to fix errors
@@ -278,9 +226,19 @@ def handlePlayerTurn(currentPlayer, enemy):
                         if currentPlayer.guesses[gridY][gridX] == 0:  # (N) if the square hasn't been shot before
                             # (N) check if it was a hit or miss using the check_hit function
                             if currentPlayer.check_hit(enemy, gridX, gridY):
-                               handleHit()
+                                playSound('explosion')
+                                msg = 'HIT! Please turn the screen to the next player' \
+                                    if enemy_is_ai else 'HIT! AI is now playing...'
+                                display_fullscreen_message(msg, {
+                                    'color': getPygameColor('ship-hit')
+                                })
                             else:
-                               handleMiss()
+                                playSound('missed')
+                                msg = 'MISS! Please turn the screen to the next player' \
+                                    if enemy_is_ai else 'MISS! AI is now playing...'
+                                display_fullscreen_message(msg, {
+                                    'color': getPygameColor('ship-miss')
+                                })
                             pygame.time.wait(settings.TURN_TIME_OUT_SECONDS * 1000)
 
                             # (N) redraw the board to show a hit or miss on the screen
@@ -288,7 +246,15 @@ def handlePlayerTurn(currentPlayer, enemy):
 
                             # (N) check for a win by calling the function on the enemy, if that is the case and the current player has won
                             if check_for_win(enemy):
-                                return handleWin(currentPlayer, enemy)
+                                msg = f"Player {currentPlayer.num} Wins!" \
+                                    if enemy_is_ai else 'You WIN!!!'
+                                display_fullscreen_message(msg, {
+                                    'font-size': getFontSizePx('lg'),
+                                    'color': getPygameColor('ship-hit')
+
+                                })
+                                pygame.time.wait(3_000)  # (N) wait a bit
+                                return False
 
                             # (N) if the game isn't over just set waiting_for_input to be false so that the while loop ends
                             waiting_for_input = False

@@ -8,6 +8,14 @@ from views import *
 from models import Player, MediumAIGuessState
 
 
+def ai_wins():
+    display_fullscreen_message("The computer has prevailed, you lose", {
+        'font-size': getFontSizePx('lg'),
+        'color': getPygameColor('ship-hit')
+
+    })
+    pygame.time.wait(3_000)  # (N) wait a bit
+
 
 def handleMediumAITurn(ai_opponent: Player, player, ai_guess_state: MediumAIGuessState):
 
@@ -36,7 +44,8 @@ def handleMediumAITurn(ai_opponent: Player, player, ai_guess_state: MediumAIGues
 
             #Check if the player has won after the guess
             if check_for_win(player):
-                return handleWin(ai_opponent, player)
+                ai_wins()
+                return False
         else:
             #Mark a miss as a bad guess
             ai_guess_state.bad_guess((mouseX, mouseY))
@@ -63,7 +72,8 @@ def handleMediumAITurn(ai_opponent: Player, player, ai_guess_state: MediumAIGues
 
             #Checks to see if player won after guess
             if check_for_win(player):
-                return handleWin(ai_opponent, player)
+                ai_wins()
+                return False
         else:
             #Handles the AI turn for medium
             return handleMediumAITurn(ai_opponent, player, ai_guess_state)
@@ -91,9 +101,7 @@ def pvc_medium(count): #Ai medium
     while game:
         drawBackground()
 
-        logging.info('player turn init')
         game = handlePlayerTurn(player, ai_opponent) #Puts everything on the board and waits for input from Player
-        logging.info('ai turn init')
         game = handleMediumAITurn(ai_opponent, player, ai_guess_state) #Waits for input from AiMedium mode
 
         clock.tick(settings.FPS)

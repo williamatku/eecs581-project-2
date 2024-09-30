@@ -86,8 +86,6 @@ class Player:  # stores the data for each player so we can alternate easily with
 
     def count_sunk_ships(self):
 
-        logging.info(self.sunk_ships)
-
         #Checks to see if the ships are sunk 
         s1 = 1 if self.sunk_ships.get(1) else 0
         s2 = 1 if self.sunk_ships.get(2) else 0
@@ -130,8 +128,6 @@ class MediumAIGuessState:
         self.guesses.append(lsg) #adds guess to the list 
 
     def bad_guess(self, bad_guezz):
-        logging.info(f'bad guess {self.failed_guesses}')
-
         self.guesses.append(bad_guezz)
         if self.failed_guesses > 3:
             #Resets to first correct guess if more than 3 consecutive guesses

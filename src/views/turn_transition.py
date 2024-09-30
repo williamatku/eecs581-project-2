@@ -55,6 +55,5 @@ def showTurnTransitionScreen(pturn: PlayerTurn) -> None:
                 mouse_pos = event.pos
                 # Check if clicked on AI button
                 if confirm_button.collidepoint(mouse_pos):
-                    logging.info("Clicked")
                     return
                 
