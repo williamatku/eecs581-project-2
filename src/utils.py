@@ -362,14 +362,11 @@ def handleMediumAITurn(ai_opponent: Player, player, ai_guess_state: AIGuessState
         except IndexError:
             pass #if the next guess in algorithm is out of bounds Handles the excpetion
 
-        logging.info(f'something seomthing {player.count_sunk_ships()}')
-
         if guess == 0: 
             #Checks to see if the AI hit the other players ships
             hit = ai_opponent.check_hit(player, mouseX, mouseY)
             #if number of sunk ships increaes then reset AI to random guess
             if ai_guess_state.curr_sunk_ships < player.count_sunk_ships():
-                logging.info('detected sunk ship')
                 ai_guess_state.reset()
             elif hit:
                 #If the next hit was a hit then continue with the guessing strategy 
@@ -378,8 +375,6 @@ def handleMediumAITurn(ai_opponent: Player, player, ai_guess_state: AIGuessState
                 #if the hit was a miss then tally it as a bas gift 
                 ai_guess_state.bad_guess((mouseX, mouseY))
 
-
-            logging.info(f'made a guess at {mouseY}, {mouseX}')
             #Check if the player has won after the guess
             if check_for_win(player):
                 return handleWin(ai_opponent, player)
@@ -407,7 +402,6 @@ def handleMediumAITurn(ai_opponent: Player, player, ai_guess_state: AIGuessState
                 #If it was a hit then start a roll 
                 ai_guess_state.start_roll((mouseX, mouseY))
 
-            logging.info(f'made a guess at {mouseY}, {mouseX}')
             #Checks to see if player won after guess
             if check_for_win(player):
                 return handleWin(ai_opponent, player)
@@ -457,5 +451,3 @@ def random_placement(count: int, ai_opponent: Player):
                     currentShip = ships.pop()  # (A) pop the next ship and repeat the loop
                 else:
                     placing = False  # (A) break the loop otherwise
-
-    print(ai_opponent.spit_board())
