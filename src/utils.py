@@ -278,7 +278,7 @@ def handleWin(currentPlayer, enemy):
     )
     pygame.display.flip()
     pygame.time.wait(3000)  # (N) wait a bit
-    return False, currentPlayer, enemy  # (N) then return False to end the game
+    return False
 
 
 def handlePlayerTurn(currentPlayer, enemy):

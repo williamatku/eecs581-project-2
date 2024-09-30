@@ -154,7 +154,6 @@ def pvc_medium(count): #Ai medium
         game = handlePlayerTurn(player, ai_opponent) #Puts everything on the board and waits for input from Player
         logging.info('ai turn init')
         game = handleMediumAITurn(ai_opponent, player, ai_guess_state) #Waits for input from AiMedium mode
-        ai_opponent.spit_guesses() #Shows your guesses
 
         clock.tick(settings.FPS)
 
@@ -184,8 +183,7 @@ def start_game():
                 logging.error("AI mode is not implemented yet.")
                 pass
             elif difficulty == "Medium":
-                logging.error("AI mode is not implemented yet.")
-                pass
+                pvc_medium(count)
             elif difficulty == "Hard":
                 pvc_hard(count)
         elif mode == "Go Back":

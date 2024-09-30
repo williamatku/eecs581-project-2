@@ -20,11 +20,11 @@ COLORS = {
     'ship-sunk': (0, 0, 0)
 }
 
-SHIP1 = pygame.image.load('images/shipImages/shipSize1.png')
-SHIP2 = pygame.image.load('images/shipImages/shipSize2.png')
-SHIP3 = pygame.image.load('images/shipImages/shipSize3.png')
-SHIP4 = pygame.image.load('images/shipImages/shipSize4.png')
-SHIP5 = pygame.image.load('images/shipImages/shipSize5.png')
+SHIP1 = pygame.image.load(STATIC_PATH.joinpath('images/shipImages/shipSize1.png'))
+SHIP2 = pygame.image.load(STATIC_PATH.joinpath('images/shipImages/shipSize2.png'))
+SHIP3 = pygame.image.load(STATIC_PATH.joinpath('images/shipImages/shipSize3.png'))
+SHIP4 = pygame.image.load(STATIC_PATH.joinpath('images/shipImages/shipSize4.png'))
+SHIP5 = pygame.image.load(STATIC_PATH.joinpath('images/shipImages/shipSize5.png'))
 
 SHIPIMAGE = {1: SHIP1, 2: SHIP2, 3: SHIP3, 4: SHIP4, 5: SHIP5} # (A) global colors for different type of ships
 
