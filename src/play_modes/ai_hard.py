@@ -5,7 +5,7 @@ import settings
 import sys
 
 from utils import *
-from views import showStartMenu, showGameView, showAIModeSelection, showTurnTransitionScreen, showOpponentSelection
+from views import showStartMenu, place_ships, showAIModeSelection, show_turn_transition, showOpponentSelection
 from models import Player
 from models import Player, PlayerTurn
 
@@ -90,13 +90,13 @@ def pvc_hard(count):  # Function to handle gameplay between user and AI hard mod
         drawBackground()
 
         if setUp:
-            showGameView(count, playerOne)  # Function for user to pick where they want to put their ships
+            place_ships(count, playerOne)  # Function for user to pick where they want to put their ships
             # AI gets matrix that says where all ships are
             cheating_board = playerOne.board  # Temporary variable cheating board to put this information in new_cheating_board
             for list in cheating_board:
                 new_cheating_board.append(list)
 
-            showTurnTransitionScreen(1)  # Variable to check if user has clicked confirm button
+            show_turn_transition(1)  # Variable to check if user has clicked confirm button
             setUp = False  # Setup is complete so this flag is marked as False
             users_turn = True  # Set the flag to true after confirmation
 

@@ -94,14 +94,14 @@ def pvc_medium(count): #Ai medium
     drawBackground() #Draws the blue background
 
 
-    showGameView(count, player) #Lets you place ships for how many you have clicked
+    place_ships(count, player) #Lets you place ships for how many you have clicked
 
 
     game = True
     while game:
         drawBackground()
 
-        game = handlePlayerTurn(player, ai_opponent, True) #Puts everything on the board and waits for input from Player
+        game = show_active_game_view(player, ai_opponent, True) #Puts everything on the board and waits for input from Player
         game = handleMediumAITurn(ai_opponent, player, ai_guess_state) #Waits for input from AiMedium mode
 
         clock.tick(settings.FPS)
