@@ -13,6 +13,8 @@ class Player:  # stores the data for each player so we can alternate easily with
                       range(settings.ROWS)]  # (A) initialize player's matrix based on game board to reflect ship states
         self.guesses = [[0 for _ in range(settings.COLS)] for _ in
                         range(settings.ROWS)]  # (A) similarly, a matrix to reflect guesses on the enemy that are accurate/misses
+        self.ai_misses = [[0 for _ in range(settings.COLS)] for _ in
+                        range(settings.ROWS)]
         self.ships = {}  # (N) a dict for the ships that will hold the size of the ships and the number of times the ship has been hit
         self.sunk_ships = {}  # (N) dict that holds the ships that are sunk that belong to the player themselves
 
