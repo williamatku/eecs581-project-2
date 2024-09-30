@@ -412,10 +412,6 @@ def handleMediumAITurn(ai_opponent: Player, player, ai_guess_state: AIGuessState
         return True
 
 
-def aiHardMode(screen, currentPlayer, enemy):
-    drawBoard(screen, currentPlayer, enemy)
-
-
 def check_for_win(player):
     """
         very quick function to check if the current player has won the game
